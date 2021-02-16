@@ -1,7 +1,8 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    jest: true
   },
   extends: [
     'airbnb-base',
@@ -18,5 +19,10 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'import/extensions': 'off'
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {}
+    }
   }
 };
