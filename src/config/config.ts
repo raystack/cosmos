@@ -23,6 +23,12 @@ const config = {
       $default: 8000
     }
   },
+  mongoose: {
+    uri: {
+      $env: 'MONGODB_HOST',
+      $default: 'mongodb://localhost/enigma'
+    }
+  },
   // Joi validation options
   validationOptions: {
     abortEarly: false, // abort after the last validation error

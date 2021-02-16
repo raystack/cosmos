@@ -35,6 +35,10 @@ const manifest: Manifest = {
   register: {
     plugins: [
       {
+        plugin: '../plugins/mongoose',
+        options: Config.get('/mongoose')
+      },
+      {
         plugin: '../app/health/index'
       },
       {

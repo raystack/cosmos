@@ -10,8 +10,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
-  db:
+      - mongodb
+    environment:
+      MONGODB_HOST: mongodb://mongodb/enigma
+  mongodb:
     image: mongo:latest
     environment:
       MONGO_INITDB_DATABASE: enigma
