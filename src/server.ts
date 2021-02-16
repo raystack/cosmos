@@ -1,24 +1,24 @@
-import Composer from './config/composer'
+import Composer from './config/composer';
 
 const main = async () => {
-    try {
-      const server = await Composer();
-      const signalHandler = async () => {
-        try {
-          await server.stop({ timeout: 30000 });
-          process.exit(0);
-        } catch (e) {
-          console.error(e);
-          process.exit(1);
-        }
-      };
-      process.on('SIGINT', signalHandler);
-      process.on('SIGTERM', signalHandler);
-      await server.start();
-    } catch (err) {
-      console.error(err);
-      process.exit(1);
-    }
-  };
+  try {
+    const server = await Composer();
+    const signalHandler = async () => {
+      try {
+        await server.stop({ timeout: 30000 });
+        process.exit(0);
+      } catch (e) {
+        console.error(e);
+        process.exit(1);
+      }
+    };
+    process.on('SIGINT', signalHandler);
+    process.on('SIGTERM', signalHandler);
+    await server.start();
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+};
 
-main()
+main();

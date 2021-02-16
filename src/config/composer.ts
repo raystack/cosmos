@@ -1,10 +1,10 @@
-import Glue, {Manifest} from '@hapi/glue'
+import Glue, { Manifest } from '@hapi/glue';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
-import HapiSwagger from 'hapi-swagger'
+import HapiSwagger from 'hapi-swagger';
 import * as Config from './config';
 import Logging from '../plugins/logging';
-const Package = require('../../package.json')
+const Package = require('../../package.json');
 
 const swaggerOptions = {
   info: {
@@ -49,7 +49,7 @@ const manifest: Manifest = {
       Logging
     ]
   }
-}
+};
 
 const options = {
   relativeTo: __dirname
@@ -60,4 +60,4 @@ const compose = async () => {
   return server;
 };
 
-export default compose
+export default compose;
