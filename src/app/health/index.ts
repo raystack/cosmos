@@ -1,5 +1,5 @@
+import Hapi from '@hapi/hapi';
 import * as Handler from './handler';
-import Hapi from '@hapi/hapi'
 
 module.exports = {
   name: 'health',

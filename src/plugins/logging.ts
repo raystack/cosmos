@@ -1,9 +1,4 @@
 import Laabr from 'laabr';
-import Hapi from '@hapi/hapi'
-
-interface Data {
-  req: Hapi.Request,
-}
 
 export default {
   plugin: Laabr,

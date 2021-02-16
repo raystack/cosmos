@@ -1,4 +1,4 @@
-import Hapi from '@hapi/hapi'
+import Hapi from '@hapi/hapi';
 
 export const ping = {
   description: 'pong the request',

@@ -1,4 +1,4 @@
-import Confidence from 'confidence'
+import Confidence from 'confidence';
 
 const criteria = {
   env: process.env.NODE_ENV,

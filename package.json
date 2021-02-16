@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --check 'src/**/*.ts'",
+    "format:fix": "npm run format -- --write",
     "start": "node build/server.js",
     "build": "tsc",
     "dev": "nodemon",
@@ -27,7 +30,15 @@
     "@types/hapi__vision": "^5.5.2",
     "@types/node": "^14.14.28",
     "@types/ramda": "^0.27.38",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.5"
   },
@@ -49,5 +60,12 @@
     ],
     "ext": "ts",
     "exec": "ts-node --files src/server.ts"
+  },
+  "prettier": {
+    "trailingComma": "none",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 80
   }
 }
