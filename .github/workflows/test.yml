@@ -10,4 +10,4 @@ jobs:
         with:
           node-version: "12.x"
       - run: npm install
-      - run: npm lint
+      - run: npm run lint
