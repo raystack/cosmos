@@ -15,7 +15,6 @@ const main = async () => {
       process.on('SIGINT', signalHandler);
       process.on('SIGTERM', signalHandler);
       await server.start();
-      console.log(`Started the Server on port:`, `${server.info.port}`);
     } catch (err) {
       console.error(err);
       process.exit(1);

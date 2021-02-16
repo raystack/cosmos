@@ -1,8 +1,9 @@
-import Glue from '@hapi/glue'
+import Glue, {Manifest} from '@hapi/glue'
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger'
-
+import * as Config from './config';
+import Logging from '../plugins/logging';
 import Package from '../../package.json'
 
 const swaggerOptions = {
@@ -14,9 +15,9 @@ const swaggerOptions = {
   deReference: true
 };
 
-const manifest = {
+const manifest: Manifest = {
   server: {
-    port: 3000,
+    port: Config.get('/port/api'),
     router: {
       stripTrailingSlash: true,
       isCaseSensitive: false
@@ -44,7 +45,8 @@ const manifest = {
       {
         plugin: HapiSwagger,
         options: swaggerOptions
-      }
+      },
+      Logging
     ]
   }
 }
