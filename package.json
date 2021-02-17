@@ -8,7 +8,7 @@
     "format": "prettier --check 'src/**/*.ts'",
     "format:fix": "npm run format -- --write",
     "start": "node build/server.js",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "nodemon",
     "test": "jest",
     "postinstall": "husky install"

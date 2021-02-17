@@ -19,7 +19,9 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     'import/extensions': 'off',
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'import/no-unresolved': 'error',
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
   },
   settings: {
     'import/resolver': {
