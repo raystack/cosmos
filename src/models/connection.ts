@@ -38,8 +38,8 @@ const ConnectionSchema = new Schema<IConnectionDocument, IConnectionModel>(
   },
   {
     timestamps: {
-      createdAt: 'created',
-      updatedAt: 'updated'
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
     },
     versionKey: false
   }

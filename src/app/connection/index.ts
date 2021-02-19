@@ -8,8 +8,13 @@ module.exports = {
     server.route([
       {
         method: 'GET',
-        path: '/',
+        path: '/connections',
         options: Handler.list
+      },
+      {
+        method: 'POST',
+        path: '/connections',
+        options: Handler.create
       }
     ]);
   }
