@@ -2,9 +2,11 @@ import Glue, { Manifest } from '@hapi/glue';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
+import Hapi from '@hapi/hapi';
 import * as Config from './config';
 import Logging from '../plugins/logging';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
 
 const swaggerOptions = {
@@ -63,7 +65,7 @@ const options = {
   relativeTo: __dirname
 };
 
-const compose = async () => {
+const compose = async (): Promise<Hapi.Server> => {
   const server = await Glue.compose(manifest, options);
   return server;
 };
