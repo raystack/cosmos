@@ -16,3 +16,23 @@ export const list = {
     });
   }
 };
+
+export const create = {
+  description: 'Create Connection',
+  tags: ['api'],
+  validate: {
+    payload: Schema.createPayload
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
+  },
+  handler: (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    return Resource.create(<Resource.CreatePayload>req.payload).then(
+      (connection) => {
+        return { connection };
+      }
+    );
+  }
+};
