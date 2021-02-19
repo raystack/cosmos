@@ -15,6 +15,11 @@ module.exports = {
         method: 'POST',
         path: '/connections',
         options: Handler.create
+      },
+      {
+        method: 'GET',
+        path: '/connections/{urn}',
+        options: Handler.get
       }
     ]);
   }

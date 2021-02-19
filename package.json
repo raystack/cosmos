@@ -107,7 +107,8 @@
       "prettier",
       "plugin:prettier/recommended",
       "prettier/@typescript-eslint",
-      "plugin:import/typescript"
+      "plugin:import/typescript",
+      "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -120,13 +121,7 @@
     "rules": {
       "import/extensions": "off",
       "import/prefer-default-export": "off",
-      "import/no-unresolved": "error",
-      "no-unused-vars": [
-        "error",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ]
+      "import/no-unresolved": "error"
     },
     "settings": {
       "import/resolver": {
