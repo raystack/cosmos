@@ -15,10 +15,6 @@ services:
       MONGODB_HOST: mongodb://mongodb/cosmos
   mongodb:
     image: mongo:latest
-    environment:
-      MONGO_INITDB_DATABASE: cosmos
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
     ports:
       - 27017:27017
     volumes:
