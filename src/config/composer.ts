@@ -42,6 +42,9 @@ const manifest: Manifest = {
         plugin: '../app/health/index'
       },
       {
+        plugin: '../app/connection/index'
+      },
+      {
         plugin: Inert
       },
       {
