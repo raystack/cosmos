@@ -11,7 +11,7 @@ export interface IConnectionDocument extends Document {
 
 export interface IConnectionModel extends Model<IConnectionDocument> {
   list(): Promise<Array<IConnectionDocument>>;
-  findByUrn(urn: string): Promise<IConnectionDocument>;
+  findByUrn(urn: string): Promise<IConnectionDocument | null>;
 }
 
 const ConnectionSchema = new Schema<IConnectionDocument, IConnectionModel>(
