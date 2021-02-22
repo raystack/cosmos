@@ -29,6 +29,10 @@ const config = {
       $default: 'mongodb://localhost/cosmos'
     }
   },
+  encryption_secrect_key: {
+    $env: 'ENCRYPTION_SECRET_KEY',
+    $default: ''
+  },
   // Joi validation options
   validationOptions: {
     abortEarly: false, // abort after the last validation error

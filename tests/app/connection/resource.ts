@@ -1,6 +1,7 @@
-import Connection, { IConnectionDocument } from 'src/models/connection';
+import Connection from 'src/models/connection';
 import * as Resource from 'src/app/connection/resource';
 import * as Transformer from 'src/app/connection/transformer';
+import { IConnectionDocument } from 'src/types';
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -20,13 +21,21 @@ describe('Connection::Resource', () => {
 
   describe('get', () => {
     test('should pass urn to findByUrn', async () => {
+      const connection = new Connection();
       const urn = 'test-urn';
       const spy = jest
         .spyOn(Connection, 'findByUrn')
-        .mockResolvedValueOnce(new Connection());
+        .mockResolvedValueOnce(connection);
+      const transformerSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
       await Resource.get(urn);
       expect(spy).toHaveBeenCalledWith(urn);
       expect(spy).toHaveBeenCalledTimes(1);
+
+      expect(transformerSpy).toHaveBeenCalledWith(connection);
+      expect(transformerSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should return null if connection not found', async () => {
@@ -34,10 +43,17 @@ describe('Connection::Resource', () => {
       const spy = jest
         .spyOn(Connection, 'findByUrn')
         .mockResolvedValueOnce(null);
+      const transformerSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
       const result = await Resource.get(urn);
       expect(result).toBeNull();
       expect(spy).toHaveBeenCalledWith(urn);
       expect(spy).toHaveBeenCalledTimes(1);
+
+      expect(transformerSpy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -45,13 +61,19 @@ describe('Connection::Resource', () => {
     test('should add connection', async () => {
       const data = {
         name: 'test',
-        credentials: 'test',
+        credentials: {
+          host: 'test'
+        },
         type: 'bq'
       };
       const urn = 'test-urn';
       const transformerSpy = jest
         .spyOn(Transformer, 'create')
-        .mockResolvedValueOnce({ urn, ...data });
+        .mockResolvedValueOnce({
+          ...data,
+          urn,
+          credentials: 'test-credentials'
+        });
       const connectionSpy = jest
         .spyOn(Connection, 'create')
         // @ts-ignore
@@ -63,7 +85,11 @@ describe('Connection::Resource', () => {
       expect(transformerSpy).toHaveBeenCalledWith(data);
       expect(transformerSpy).toHaveBeenCalledTimes(1);
 
-      expect(connectionSpy).toHaveBeenCalledWith({ ...data, urn });
+      expect(connectionSpy).toHaveBeenCalledWith({
+        ...data,
+        urn,
+        credentials: 'test-credentials'
+      });
       expect(connectionSpy).toHaveBeenCalledTimes(1);
     });
   });
