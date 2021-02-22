@@ -12,9 +12,9 @@ export const listResponse = Joi.object({
 });
 
 export const createPayload = Joi.object().keys({
-  name: Joi.string(),
-  type: Joi.string(),
-  credentials: Joi.string()
+  name: Joi.string().required(),
+  type: Joi.string().required(),
+  credentials: Joi.string().required()
 });
 
 export const createResponse = Joi.object({
