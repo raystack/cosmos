@@ -13,5 +13,9 @@ export const data = new Factory()
 export const payload = new Factory().attrs({
   name: faker.lorem.word(),
   type: faker.database.engine(),
-  credentials: faker.lorem.sentence()
+  credentials: {
+    host: faker.internet.ip(),
+    username: faker.internet.userName(),
+    password: faker.internet.password()
+  }
 });

@@ -1,13 +1,5 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-
-export interface IConnectionDocument extends Document {
-  urn: string;
-  name: string;
-  type: string;
-  credentials: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import mongoose, { Schema, Model } from 'mongoose';
+import { IConnectionDocument } from 'src/types';
 
 export interface IConnectionModel extends Model<IConnectionDocument> {
   list(): Promise<Array<IConnectionDocument>>;
