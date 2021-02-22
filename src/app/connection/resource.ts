@@ -19,7 +19,7 @@ export const create = async (
   return connection;
 };
 
-export const get = async (urn: string): Promise<IConnectionDocument> => {
+export const get = async (urn: string): Promise<IConnectionDocument | null> => {
   const connection = await Connection.findByUrn(urn);
   return connection;
 };
