@@ -1,5 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
+import { ICreateConnectionPayload } from 'src/types';
 import * as Schema from './schema';
 import * as Resource from './resource';
 
@@ -30,7 +31,7 @@ export const create = {
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const connection = await Resource.create(
-      <Resource.CreatePayload>req.payload
+      <ICreateConnectionPayload>req.payload
     );
     return { connection };
   }
