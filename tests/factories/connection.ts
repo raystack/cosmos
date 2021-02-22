@@ -9,3 +9,9 @@ export const data = new Factory()
     createdAt: () => new Date(),
     updatedAt: () => new Date()
   });
+
+export const payload = new Factory().attrs({
+  name: faker.lorem.word(),
+  type: faker.database.engine(),
+  credentials: faker.lorem.sentence()
+});
