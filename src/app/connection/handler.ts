@@ -104,3 +104,18 @@ export const testConnection = {
     return { data };
   }
 };
+
+export const listTables = {
+  description: "Get Connection's tables list",
+  tags: ['api'],
+  validate: {
+    params: Schema.getParams
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.listTables(req.params.urn);
+    if (!data) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data };
+  }
+};

@@ -1,15 +1,18 @@
-import { DatabaseType, CubejsServerCore } from '@cubejs-backend/server-core';
+import { CubejsServerCore } from '@cubejs-backend/server-core';
 import { BaseDriver } from '@cubejs-backend/query-orchestrator';
+import { SupportedDBType, IPGTablesResult } from 'src/types';
+
+const PG_TABLE_QUERY = `SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public';`;
 
 export default class ConnectionProvider {
   credentials: Record<string, string | number>;
 
-  dbType: DatabaseType;
+  dbType: SupportedDBType;
 
   driver: BaseDriver;
 
   constructor(
-    type: DatabaseType,
+    type: SupportedDBType,
     credentials: Record<string, string | number>
   ) {
     this.dbType = type;
@@ -26,7 +29,7 @@ export default class ConnectionProvider {
 
   private getDriver(): BaseDriver {
     const Module = this.getDriverModule();
-    return new Module(this.credentials);
+    return new Module({ ...this.credentials, readOnly: true });
   }
 
   public async test(): Promise<string> {
@@ -36,6 +39,29 @@ export default class ConnectionProvider {
     } catch (err) {
       console.log(err);
       return 'Failure';
+    }
+  }
+
+  public async getPGTablesList(): Promise<string[]> {
+    const tables = <IPGTablesResult[]>(
+      await this.driver.query(PG_TABLE_QUERY, [])
+    );
+    return tables.map((t) => t.table_name);
+  }
+
+  public async getTablesList(): Promise<string[]> {
+    switch (this.dbType) {
+      case 'postgres':
+        return this.getPGTablesList();
+      default: {
+        const schemas = await this.driver.tablesSchema();
+        return Object.keys(schemas).reduce((acc: string[], schema: string) => {
+          const tables = Object.keys(schemas[schema]).map(
+            (table) => `${schema}.${table}`
+          );
+          return [...acc, ...tables];
+        }, []);
+      }
     }
   }
 }

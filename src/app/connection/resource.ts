@@ -49,3 +49,14 @@ export const testConnection = async (urn: string): Promise<string | null> => {
   );
   return provider.test();
 };
+
+export const listTables = async (urn: string): Promise<any> => {
+  const connection = await Connection.findByUrn(urn);
+  if (!connection) return null;
+  const transformedData = await Transformer.get(connection);
+  const provider = new ConnectionProvider(
+    transformedData.type,
+    transformedData.credentials
+  );
+  return provider.getTablesList();
+};

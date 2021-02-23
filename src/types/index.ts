@@ -40,3 +40,8 @@ export interface ICreateConnectionTransformedPayload
   urn: string;
   credentials: string;
 }
+
+export interface IPGTablesResult {
+  // eslint-disable-next-line camelcase
+  table_name: string;
+}
