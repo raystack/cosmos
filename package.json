@@ -55,6 +55,9 @@
     "typescript": "^4.1.5"
   },
   "dependencies": {
+    "@cubejs-backend/postgres-driver": "0.26.25",
+    "@cubejs-backend/query-orchestrator": "0.26.25",
+    "@cubejs-backend/server-core": "0.26.25",
     "@hapi/boom": "^9.1.1",
     "@hapi/glue": "^8.0.0",
     "@hapi/hapi": "^20.1.0",
