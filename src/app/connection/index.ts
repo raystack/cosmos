@@ -35,6 +35,11 @@ module.exports = {
         method: 'GET',
         path: '/connections/{urn}/test',
         options: Handler.testConnection
+      },
+      {
+        method: 'GET',
+        path: '/connections/{urn}/tables',
+        options: Handler.listTables
       }
     ]);
   }

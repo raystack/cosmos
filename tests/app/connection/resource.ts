@@ -17,7 +17,7 @@ describe('Connection::Resource', () => {
       const expectedResult: IConnectionDocument[] = [];
       const result = await Resource.list();
       expect(result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith();
+      expect(spy).toHaveBeenCalledWith(/* empty */);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
@@ -236,6 +236,59 @@ describe('Connection::Resource', () => {
       expect(transformerGetSpy).toHaveBeenCalledTimes(1);
 
       expect(ConnectionProvider.prototype.test).toHaveBeenCalledTimes(1);
+      expect(
+        ConnectionProvider.prototype.test
+      ).toHaveBeenCalledWith(/* empty */);
+    });
+  });
+
+  describe('listTables', () => {
+    test('should return null if connection not found', async () => {
+      const urn = 'test-urn';
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(null);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      const result = await Resource.testConnection(urn);
+      expect(result).toBeNull();
+
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should return the table list', async () => {
+      const urn = 'test-urn';
+      const connection = new Connection({ urn });
+
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(connection);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      ConnectionProvider.prototype.getTablesList = jest
+        .fn()
+        .mockResolvedValueOnce(['table-1', 'table-2']);
+
+      const result = await Resource.listTables(urn);
+      expect(result).toEqual(['table-1', 'table-2']);
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
+      expect(ConnectionProvider.prototype.getTablesList).toHaveBeenCalledTimes(
+        1
+      );
+      expect(
+        ConnectionProvider.prototype.getTablesList
+      ).toHaveBeenCalledWith(/* empty */);
     });
   });
 });

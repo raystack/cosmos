@@ -51,7 +51,7 @@ describe('Connection::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith();
+      expect(spy).toHaveBeenCalledWith(/* empty */);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -66,7 +66,7 @@ describe('Connection::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith();
+      expect(spy).toHaveBeenCalledWith(/* empty */);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -77,7 +77,7 @@ describe('Connection::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(500);
       expect(response.result.error).toBe('Internal Server Error');
-      expect(spy).toHaveBeenCalledWith();
+      expect(spy).toHaveBeenCalledWith(/* empty */);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
@@ -275,7 +275,7 @@ describe('Connection::Handler', () => {
     });
   });
 
-  describe('test-connection', () => {
+  describe('testConnection', () => {
     const urn = 'test-urn';
     let request: ServerInjectOptions;
     beforeEach(() => {
@@ -313,6 +313,53 @@ describe('Connection::Handler', () => {
         .mockResolvedValueOnce('Success');
       const expectedResult = {
         data: 'Success'
+      };
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(urn);
+    });
+  });
+
+  describe('listTables', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/connections/${urn}/tables`
+      };
+    });
+
+    test('returns 404 when connection not found', async () => {
+      const spy = jest
+        .spyOn(Resource, 'listTables')
+        .mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'listTables')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return the tables list', async () => {
+      const spy = jest
+        .spyOn(Resource, 'listTables')
+        .mockResolvedValueOnce(['table-1', 'table-2']);
+      const expectedResult = {
+        data: ['table-1', 'table-2']
       };
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(200);
