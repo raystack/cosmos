@@ -1,9 +1,15 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { IConnectionDocument } from 'src/types';
+import { IConnectionDocument, ICreateConnectionPayload } from 'src/types';
 
 export interface IConnectionModel extends Model<IConnectionDocument> {
   list(): Promise<Array<IConnectionDocument>>;
   findByUrn(urn: string): Promise<IConnectionDocument | null>;
+  updateByUrn(
+    urn: string,
+    data: Omit<ICreateConnectionPayload, 'credentials'> & {
+      credentials: string;
+    }
+  ): Promise<IConnectionDocument | null>;
 }
 
 const ConnectionSchema = new Schema<IConnectionDocument, IConnectionModel>(
@@ -44,6 +50,16 @@ ConnectionSchema.statics.list = function list() {
 
 ConnectionSchema.statics.findByUrn = function findByUrn(urn) {
   return this.findOne({ urn }, { _id: 0 }).lean().exec();
+};
+
+ConnectionSchema.statics.updateByUrn = function updateByUrn(urn, data) {
+  return this.findOneAndUpdate(
+    { urn },
+    { $set: data },
+    { projection: { _id: 0 }, new: true }
+  )
+    .lean()
+    .exec();
 };
 
 export default mongoose.model<IConnectionDocument, IConnectionModel>(
