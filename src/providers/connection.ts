@@ -1,8 +1,9 @@
 import { CubejsServerCore } from '@cubejs-backend/server-core';
 import { BaseDriver } from '@cubejs-backend/query-orchestrator';
-import { SupportedDBType, IPGTablesResult } from 'src/types';
+import { SupportedDBType, IPGTablesDetails } from 'src/types';
 
 const PG_TABLE_QUERY = `SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public';`;
+const PG_DESCRIBE_TABLE_QUERY = `SELECT table_catalog, table_name, column_name, data_type FROM information_schema.columns WHERE table_name=$1;`;
 
 export default class ConnectionProvider {
   credentials: Record<string, string | number>;
@@ -43,7 +44,7 @@ export default class ConnectionProvider {
   }
 
   public async getPGTablesList(): Promise<string[]> {
-    const tables = <IPGTablesResult[]>(
+    const tables = <IPGTablesDetails[]>(
       await this.driver.query(PG_TABLE_QUERY, [])
     );
     return tables.map((t) => t.table_name);
@@ -61,6 +62,35 @@ export default class ConnectionProvider {
           );
           return [...acc, ...tables];
         }, []);
+      }
+    }
+  }
+
+  public async getPGTablesDetails(
+    tableName: string
+  ): Promise<IPGTablesDetails[]> {
+    return <Promise<IPGTablesDetails[]>>(
+      this.driver.query(PG_DESCRIBE_TABLE_QUERY, [tableName])
+    );
+  }
+
+  public async getTablesDetails(
+    tableName: string
+  ): Promise<IPGTablesDetails[] | unknown> {
+    const [schema, table] =
+      tableName.match(/(["`].*?["`]|[^`".]+)+(?=\s*|\s*$)/g) || [];
+
+    switch (this.dbType) {
+      case 'postgres':
+        return this.getPGTablesDetails(table || tableName);
+      default: {
+        if (!schema || !table) {
+          throw new Error(
+            `Incorrect format for '${tableName}'. Should be in '<schema>.<table>' format`
+          );
+        }
+        const schemas = await this.driver.tablesSchema();
+        return schemas[schema][table];
       }
     }
   }

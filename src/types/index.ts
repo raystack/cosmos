@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Document } from 'mongoose';
 
 // * Important: need to install cube driver for the supported dbs
@@ -41,7 +42,9 @@ export interface ICreateConnectionTransformedPayload
   credentials: string;
 }
 
-export interface IPGTablesResult {
-  // eslint-disable-next-line camelcase
+export interface IPGTablesDetails {
+  table_catalog: string;
   table_name: string;
+  column_name: string;
+  data_type: string;
 }

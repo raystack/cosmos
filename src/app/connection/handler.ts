@@ -119,3 +119,18 @@ export const listTables = {
     return { data };
   }
 };
+
+export const getTable = {
+  description: 'Get table details',
+  tags: ['api'],
+  validate: {
+    params: Schema.getTableParams
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.getTable(req.params.urn, req.params.table_name);
+    if (!data) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data };
+  }
+};

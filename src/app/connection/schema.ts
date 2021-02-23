@@ -18,6 +18,11 @@ export const getParams = Joi.object({
   urn: Joi.string().required()
 });
 
+export const getTableParams = Joi.object({
+  urn: Joi.string().required(),
+  table_name: Joi.string().required()
+});
+
 export const createPayload = Joi.object()
   .keys({
     name: Joi.string(),
