@@ -1,4 +1,7 @@
 import * as Joi from 'joi';
+import { SupportedDBType } from 'src/types';
+
+const supportedDBs: Array<SupportedDBType> = ['postgres'];
 
 const connectionResponse = Joi.object({
   urn: Joi.string(),
@@ -18,7 +21,9 @@ export const getParams = Joi.object({
 export const createPayload = Joi.object()
   .keys({
     name: Joi.string(),
-    type: Joi.string().required(),
+    type: Joi.string()
+      .required()
+      .valid(...supportedDBs),
     credentials: Joi.object().required()
   })
   .options({
@@ -29,7 +34,7 @@ export const createPayload = Joi.object()
 export const updatePayload = Joi.object()
   .keys({
     name: Joi.string(),
-    type: Joi.string(),
+    type: Joi.string().valid(...supportedDBs),
     credentials: Joi.object()
   })
   .options({
