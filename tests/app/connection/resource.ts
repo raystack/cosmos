@@ -1,7 +1,7 @@
 import Connection from 'src/models/connection';
 import * as Resource from 'src/app/connection/resource';
 import * as Transformer from 'src/app/connection/transformer';
-import { IConnectionDocument } from 'src/types';
+import { IConnectionDocument, SupportedDBType } from 'src/types';
 
 afterEach(() => {
   jest.resetAllMocks();
@@ -64,7 +64,7 @@ describe('Connection::Resource', () => {
         credentials: {
           host: 'test'
         },
-        type: 'bq'
+        type: <SupportedDBType>'postgres'
       };
       const urn = 'test-urn';
       const connection = new Connection({ urn });
@@ -115,7 +115,7 @@ describe('Connection::Resource', () => {
         credentials: {
           host: 'test'
         },
-        type: 'bq'
+        type: <SupportedDBType>'postgres'
       };
       const connectionSpy = jest
         .spyOn(Connection, 'updateByUrn')
@@ -153,7 +153,7 @@ describe('Connection::Resource', () => {
         credentials: {
           host: 'test'
         },
-        type: 'bq'
+        type: <SupportedDBType>'postgres'
       };
       const connection = new Connection(data);
 

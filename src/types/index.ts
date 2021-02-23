@@ -1,9 +1,11 @@
-import { DatabaseType } from '@cubejs-backend/server-core';
 import { Document } from 'mongoose';
+
+// * Important: need to install cube driver for the supported dbs
+export type SupportedDBType = 'postgres';
 
 export interface ICreateConnectionPayload {
   name: string;
-  type: DatabaseType;
+  type: SupportedDBType;
   credentials: Record<string, string | number>;
 }
 
