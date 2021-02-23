@@ -20,7 +20,7 @@ export interface IConnectionResponse extends Omit<IConnection, 'credentials'> {
   credentials: Record<string, string>;
 }
 
-export interface ICreateConnectionTransformReturn
+export interface ICreateConnectionTransformedPayload
   extends Omit<ICreateConnectionPayload, 'credentials'> {
   urn: string;
   credentials: string;

@@ -106,4 +106,85 @@ describe('Connection::Resource', () => {
       expect(connectionSpy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update', () => {
+    test('should return null if connection not found', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        credentials: {
+          host: 'test'
+        },
+        type: 'bq'
+      };
+      const connectionSpy = jest
+        .spyOn(Connection, 'updateByUrn')
+        .mockResolvedValueOnce(null);
+
+      const transformerUpdateSpy = jest
+        .spyOn(Transformer, 'update')
+        .mockResolvedValueOnce({
+          ...data,
+          credentials: 'test-credentials'
+        });
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      const result = await Resource.update(urn, data);
+      expect(result).toBeNull();
+      expect(connectionSpy).toHaveBeenCalledWith(urn, {
+        ...data,
+        credentials: 'test-credentials'
+      });
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(0);
+
+      expect(transformerUpdateSpy).toHaveBeenCalledWith(data);
+      expect(transformerUpdateSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should update the connection', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        credentials: {
+          host: 'test'
+        },
+        type: 'bq'
+      };
+      const connection = new Connection(data);
+
+      const connectionSpy = jest
+        .spyOn(Connection, 'updateByUrn')
+        .mockResolvedValueOnce(connection);
+
+      const transformerUpdateSpy = jest
+        .spyOn(Transformer, 'update')
+        .mockResolvedValueOnce({
+          ...data,
+          credentials: 'test-credentials'
+        });
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({ ...data, urn });
+
+      const result = await Resource.update(urn, data);
+      expect(result?.urn).toBe(urn);
+      expect(connectionSpy).toHaveBeenCalledWith(urn, {
+        ...data,
+        credentials: 'test-credentials'
+      });
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
+      expect(transformerGetSpy).toHaveBeenCalledWith(connection);
+
+      expect(transformerUpdateSpy).toHaveBeenCalledWith(data);
+      expect(transformerUpdateSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
