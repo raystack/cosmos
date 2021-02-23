@@ -40,6 +40,9 @@ export const create = {
 export const get = {
   description: 'Get Connection by urn',
   tags: ['api'],
+  validate: {
+    params: Schema.getParams
+  },
   response: {
     status: {
       200: Schema.createResponse
@@ -47,6 +50,30 @@ export const get = {
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const connection = await Resource.get(req.params.urn);
+    if (!connection) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { connection };
+  }
+};
+
+export const update = {
+  description: 'Update Connection by urn',
+  tags: ['api'],
+  validate: {
+    payload: Schema.updatePayload,
+    params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const connection = await Resource.update(
+      req.params.urn,
+      <ICreateConnectionPayload>req.payload
+    );
     if (!connection) {
       throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
     }
