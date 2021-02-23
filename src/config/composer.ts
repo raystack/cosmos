@@ -15,7 +15,9 @@ const swaggerOptions = {
     version: Package.version
   },
   schemes: ['http'],
-  deReference: true
+  deReference: true,
+  basePath: '/api',
+  pathPrefixSize: 2
 };
 
 const manifest: Manifest = {
@@ -41,10 +43,16 @@ const manifest: Manifest = {
         options: Config.get('/mongoose')
       },
       {
-        plugin: '../app/health/index'
+        plugin: '../app/health/index',
+        routes: {
+          prefix: '/api'
+        }
       },
       {
-        plugin: '../app/connection/index'
+        plugin: '../app/connection/index',
+        routes: {
+          prefix: '/api'
+        }
       },
       {
         plugin: Inert
