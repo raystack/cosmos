@@ -80,3 +80,12 @@ export const update = {
     return { connection };
   }
 };
+
+export const getFields = {
+  description: 'Get Connection fields',
+  tags: ['api'],
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.getFields();
+    return { data };
+  }
+};

@@ -25,6 +25,11 @@ module.exports = {
         method: 'PUT',
         path: '/connections/{urn}',
         options: Handler.update
+      },
+      {
+        method: 'GET',
+        path: '/connections-fields',
+        options: Handler.getFields
       }
     ]);
   }

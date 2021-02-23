@@ -1,6 +1,11 @@
 import Connection from 'src/models/connection';
-import { ICreateConnectionPayload, IConnectionResponse } from 'src/types';
+import {
+  ICreateConnectionPayload,
+  IConnectionResponse,
+  IFieldsMap
+} from 'src/types';
 import * as Transformer from './transformer';
+import Fields from './fields';
 
 export const list = async (): Promise<IConnectionResponse[]> => {
   const connections = await Connection.list();
@@ -27,4 +32,8 @@ export const update = async (
   const data = await Transformer.update(payload);
   const connection = await Connection.updateByUrn(urn, data);
   return connection && Transformer.get(connection);
+};
+
+export const getFields = async (): Promise<IFieldsMap> => {
+  return Fields;
 };
