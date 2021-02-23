@@ -40,6 +40,11 @@ module.exports = {
         method: 'GET',
         path: '/connections/{urn}/tables',
         options: Handler.listTables
+      },
+      {
+        method: 'GET',
+        path: '/connections/{urn}/tables/{table_name}',
+        options: Handler.getTable
       }
     ]);
   }
