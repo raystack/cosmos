@@ -1,9 +1,10 @@
+import { DatabaseType } from '@cubejs-backend/server-core';
 import { Document } from 'mongoose';
 
 export interface ICreateConnectionPayload {
   name: string;
-  type: string;
-  credentials: Record<string, string>;
+  type: DatabaseType;
+  credentials: Record<string, string | number>;
 }
 
 export interface IConnection
@@ -17,7 +18,7 @@ export interface IConnection
 export type IConnectionDocument = IConnection & Document;
 
 export interface IConnectionResponse extends Omit<IConnection, 'credentials'> {
-  credentials: Record<string, string>;
+  credentials: Record<string, string | number>;
 }
 
 export interface IFieldsObject {
