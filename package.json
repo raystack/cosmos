@@ -88,8 +88,8 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "tests/(.*)": "<rootDir>/tests/$1",
-      "src/(.*)": "<rootDir>/src/$1"
+      "^tests/(.*)": "<rootDir>/tests/$1",
+      "^src/(.*)": "<rootDir>/src/$1"
     },
     "testPathIgnorePatterns": [
       "/node_modules/",

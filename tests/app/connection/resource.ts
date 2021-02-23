@@ -2,10 +2,13 @@ import Connection from 'src/models/connection';
 import * as Resource from 'src/app/connection/resource';
 import * as Transformer from 'src/app/connection/transformer';
 import { IConnectionDocument, SupportedDBType } from 'src/types';
+import ConnectionProvider from 'src/providers/connection';
 
 afterEach(() => {
   jest.resetAllMocks();
 });
+
+jest.mock('src/providers/connection');
 
 describe('Connection::Resource', () => {
   describe('list', () => {
@@ -185,6 +188,54 @@ describe('Connection::Resource', () => {
 
       expect(transformerUpdateSpy).toHaveBeenCalledWith(data);
       expect(transformerUpdateSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('testConnection', () => {
+    test('should return null if connection not found', async () => {
+      const urn = 'test-urn';
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(null);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      const result = await Resource.testConnection(urn);
+      expect(result).toBeNull();
+
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should return the test result', async () => {
+      const urn = 'test-urn';
+      const connection = new Connection({ urn });
+
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(connection);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      ConnectionProvider.prototype.test = jest
+        .fn()
+        .mockResolvedValueOnce('success');
+
+      const result = await Resource.testConnection(urn);
+      expect(result).toBe('success');
+
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
+
+      expect(ConnectionProvider.prototype.test).toHaveBeenCalledTimes(1);
     });
   });
 });
