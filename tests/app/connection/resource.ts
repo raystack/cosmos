@@ -67,23 +67,36 @@ describe('Connection::Resource', () => {
         type: 'bq'
       };
       const urn = 'test-urn';
-      const transformerSpy = jest
+      const connection = new Connection({ urn });
+      const transformerCreateSpy = jest
         .spyOn(Transformer, 'create')
         .mockResolvedValueOnce({
           ...data,
           urn,
           credentials: 'test-credentials'
         });
+
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({
+          ...data,
+          urn
+        });
+
       const connectionSpy = jest
         .spyOn(Connection, 'create')
         // @ts-ignore
-        .mockResolvedValue(new Connection({ urn }));
+        .mockResolvedValue(connection);
       const result = await Resource.create(data);
 
       expect(result.urn).toBe(urn);
 
-      expect(transformerSpy).toHaveBeenCalledWith(data);
-      expect(transformerSpy).toHaveBeenCalledTimes(1);
+      expect(transformerCreateSpy).toHaveBeenCalledWith(data);
+      expect(transformerCreateSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledWith(connection.toJSON());
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
 
       expect(connectionSpy).toHaveBeenCalledWith({
         ...data,

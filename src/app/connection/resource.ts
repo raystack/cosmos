@@ -1,9 +1,5 @@
 import Connection from 'src/models/connection';
-import {
-  ICreateConnectionPayload,
-  IConnectionDocument,
-  IConnectionResponse
-} from 'src/types';
+import { ICreateConnectionPayload, IConnectionResponse } from 'src/types';
 import * as Transformer from './transformer';
 
 export const list = async (): Promise<IConnectionResponse[]> => {
@@ -13,10 +9,10 @@ export const list = async (): Promise<IConnectionResponse[]> => {
 
 export const create = async (
   data: ICreateConnectionPayload
-): Promise<IConnectionDocument> => {
+): Promise<IConnectionResponse> => {
   const payload = await Transformer.create(data);
   const connection = await Connection.create(payload);
-  return connection;
+  return connection && Transformer.get(connection.toJSON());
 };
 
 export const get = async (urn: string): Promise<IConnectionResponse | null> => {
