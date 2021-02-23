@@ -31,7 +31,7 @@ const config = {
   },
   encryption_secrect_key: {
     $env: 'ENCRYPTION_SECRET_KEY',
-    $default: ''
+    $default: 'test'
   },
   // Joi validation options
   validationOptions: {
