@@ -4,6 +4,7 @@ import {
   IConnectionResponse,
   IFieldsMap
 } from 'src/types';
+import ConnectionProvider from 'src/providers/connection';
 import * as Transformer from './transformer';
 import Fields from './fields';
 
@@ -36,4 +37,15 @@ export const update = async (
 
 export const getFields = async (): Promise<IFieldsMap> => {
   return Fields;
+};
+
+export const testConnection = async (urn: string): Promise<string | null> => {
+  const connection = await Connection.findByUrn(urn);
+  if (!connection) return null;
+  const transformedData = await Transformer.get(connection);
+  const provider = new ConnectionProvider(
+    transformedData.type,
+    transformedData.credentials
+  );
+  return provider.test();
 };

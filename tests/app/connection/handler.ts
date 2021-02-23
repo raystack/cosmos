@@ -274,4 +274,51 @@ describe('Connection::Handler', () => {
       expect(spy).toHaveBeenCalledWith(urn, payload);
     });
   });
+
+  describe('test-connection', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/connections/${urn}/test`
+      };
+    });
+
+    test('returns 404 when connection not found', async () => {
+      const spy = jest
+        .spyOn(Resource, 'testConnection')
+        .mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'testConnection')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return the test result', async () => {
+      const spy = jest
+        .spyOn(Resource, 'testConnection')
+        .mockResolvedValueOnce('Success');
+      const expectedResult = {
+        data: 'Success'
+      };
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(urn);
+    });
+  });
 });

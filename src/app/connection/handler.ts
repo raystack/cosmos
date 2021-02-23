@@ -89,3 +89,18 @@ export const getFields = {
     return { data };
   }
 };
+
+export const testConnection = {
+  description: 'Test Connection',
+  tags: ['api'],
+  validate: {
+    params: Schema.getParams
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.testConnection(req.params.urn);
+    if (!data) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data };
+  }
+};
