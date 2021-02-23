@@ -6,17 +6,17 @@ export interface ICreateConnectionPayload {
   credentials: Record<string, string>;
 }
 
-export interface IConnectionDocument
-  extends Omit<ICreateConnectionPayload, 'credentials'>,
-    Document {
+export interface IConnection
+  extends Omit<ICreateConnectionPayload, 'credentials'> {
   urn: string;
   credentials: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface IConnectionResponse
-  extends Omit<IConnectionDocument, 'credentials'> {
+export type IConnectionDocument = IConnection & Document;
+
+export interface IConnectionResponse extends Omit<IConnection, 'credentials'> {
   credentials: Record<string, string>;
 }
 
