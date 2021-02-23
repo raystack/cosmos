@@ -4,7 +4,7 @@ const connectionResponse = Joi.object({
   urn: Joi.string(),
   name: Joi.string(),
   type: Joi.string(),
-  credentials: Joi.string()
+  credentials: Joi.object()
 }).unknown(true);
 
 export const listResponse = Joi.object({

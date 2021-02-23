@@ -3,7 +3,7 @@ import {
   ICreateConnectionPayload,
   ICreateConnectionTransformReturn,
   IConnectionResponse,
-  IConnectionDocument
+  IConnection
 } from 'src/types';
 
 export async function create(
@@ -14,8 +14,6 @@ export async function create(
   return dataWithEncryptedCredentials;
 }
 
-export async function get(
-  data: IConnectionDocument
-): Promise<IConnectionResponse> {
+export async function get(data: IConnection): Promise<IConnectionResponse> {
   return Adapter.decrptCredentials(data);
 }
