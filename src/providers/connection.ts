@@ -114,9 +114,8 @@ export default class ConnectionProvider {
     }
   }
 
-  public async getTableCube(tableName: string, urn: string): Promise<unknown> {
+  public async getTableCube(tableName: string, urn: string): Promise<string> {
     const schemas = await this.driver.tablesSchema();
-
     const template = new ScaffoldingTemplate(schemas, this.driver);
     const scaffoldingSchema = new ScaffoldingSchema(schemas);
     scaffoldingSchema.prepareTableNamesToTables([tableName]);

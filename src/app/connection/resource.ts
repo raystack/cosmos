@@ -82,7 +82,7 @@ export const getTable = async (
 export const getTableCube = async (
   urn: string,
   table: string
-): Promise<unknown> => {
+): Promise<string | null> => {
   const connection = await Connection.findByUrn(urn);
   if (!connection) return null;
   const transformedData = await Transformer.get(connection);

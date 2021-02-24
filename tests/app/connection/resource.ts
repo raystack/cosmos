@@ -253,7 +253,7 @@ describe('Connection::Resource', () => {
         // @ts-ignore
         .mockResolvedValueOnce({});
 
-      const result = await Resource.testConnection(urn);
+      const result = await Resource.listTables(urn);
       expect(result).toBeNull();
 
       expect(connectionSpy).toHaveBeenCalledWith(urn);
@@ -289,6 +289,133 @@ describe('Connection::Resource', () => {
       expect(
         ConnectionProvider.prototype.getTablesList
       ).toHaveBeenCalledWith(/* empty */);
+    });
+  });
+
+  describe('getTable', () => {
+    test('should return null if connection not found', async () => {
+      const urn = 'test-urn';
+      const tableName = 'table1';
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(null);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      const result = await Resource.getTable(urn, tableName);
+      expect(result).toBeNull();
+
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should return the table details', async () => {
+      const urn = 'test-urn';
+      const tableName = 'table1';
+      const connection = new Connection({ urn });
+
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(connection);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      ConnectionProvider.prototype.getTablesDetails = jest
+        .fn()
+        .mockResolvedValueOnce([
+          {
+            name: 'order_no',
+            type: 'STRING',
+            mode: 'NULLABLE'
+          },
+          {
+            name: 'booking_time',
+            type: 'TIMESTAMP',
+            mode: 'NULLABLE'
+          }
+        ]);
+
+      const result = await Resource.getTable(urn, tableName);
+      expect(result).toEqual([
+        {
+          name: 'order_no',
+          type: 'STRING',
+          mode: 'NULLABLE'
+        },
+        {
+          name: 'booking_time',
+          type: 'TIMESTAMP',
+          mode: 'NULLABLE'
+        }
+      ]);
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
+      expect(
+        ConnectionProvider.prototype.getTablesDetails
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        ConnectionProvider.prototype.getTablesDetails
+      ).toHaveBeenCalledWith(tableName);
+    });
+  });
+
+  describe('getTableCube', () => {
+    test('should return null if connection not found', async () => {
+      const urn = 'test-urn';
+      const tableName = 'table1';
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(null);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      const result = await Resource.getTable(urn, tableName);
+      expect(result).toBeNull();
+
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+
+      expect(transformerGetSpy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should return the table cube schema', async () => {
+      const urn = 'test-urn';
+      const tableName = 'table1';
+      const connection = new Connection({ urn });
+
+      const connectionSpy = jest
+        .spyOn(Connection, 'findByUrn')
+        .mockResolvedValueOnce(connection);
+      const transformerGetSpy = jest
+        .spyOn(Transformer, 'get')
+        // @ts-ignore
+        .mockResolvedValueOnce({});
+
+      ConnectionProvider.prototype.getTableCube = jest
+        .fn()
+        .mockResolvedValueOnce('table cube schema');
+
+      const result = await Resource.getTableCube(urn, tableName);
+      expect(result).toBe('table cube schema');
+      expect(connectionSpy).toHaveBeenCalledWith(urn);
+      expect(connectionSpy).toHaveBeenCalledTimes(1);
+      expect(transformerGetSpy).toHaveBeenCalledTimes(1);
+      expect(ConnectionProvider.prototype.getTableCube).toHaveBeenCalledTimes(
+        1
+      );
+      expect(ConnectionProvider.prototype.getTableCube).toHaveBeenCalledWith(
+        tableName,
+        urn
+      );
     });
   });
 });

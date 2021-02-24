@@ -372,4 +372,118 @@ describe('Connection::Handler', () => {
       expect(spy).toHaveBeenCalledWith(urn);
     });
   });
+
+  describe('getTable', () => {
+    const urn = 'test-urn';
+    const tableName = 'table1';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/connections/${urn}/tables/${tableName}`
+      };
+    });
+
+    test('returns 404 when connection not found', async () => {
+      const spy = jest.spyOn(Resource, 'getTable').mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'getTable')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return the tables details', async () => {
+      const spy = jest.spyOn(Resource, 'getTable').mockResolvedValueOnce([
+        {
+          name: 'order_no',
+          type: 'STRING',
+          mode: 'NULLABLE'
+        },
+        {
+          name: 'booking_time',
+          type: 'TIMESTAMP',
+          mode: 'NULLABLE'
+        }
+      ]);
+      const expectedResult = {
+        data: [
+          {
+            name: 'order_no',
+            type: 'STRING',
+            mode: 'NULLABLE'
+          },
+          {
+            name: 'booking_time',
+            type: 'TIMESTAMP',
+            mode: 'NULLABLE'
+          }
+        ]
+      };
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+    });
+  });
+
+  describe('getTableCube', () => {
+    const urn = 'test-urn';
+    const tableName = 'table1';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/connections/${urn}/tables/${tableName}/cube`
+      };
+    });
+
+    test('returns 404 when connection not found', async () => {
+      const spy = jest
+        .spyOn(Resource, 'getTableCube')
+        .mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'getTableCube')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return the tables cube schema', async () => {
+      const spy = jest
+        .spyOn(Resource, 'getTableCube')
+        .mockResolvedValueOnce('table cube schema');
+      const expectedResult = {
+        data: 'table cube schema'
+      };
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(urn, tableName);
+    });
+  });
 });
