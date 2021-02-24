@@ -56,8 +56,8 @@ describe('ConnectionProvider', () => {
   describe('getTablesList', () => {
     test('should return table list', async () => {
       const mockTableSchema = jest.fn().mockResolvedValueOnce({
-        schema1: { table1: {}, table2: {} },
-        schema2: { table1: {}, table2: {} }
+        schema1: { table1: [], table2: [] },
+        schema2: { table1: [], table2: [] }
       });
       // @ts-ignore
       const testDriver: BaseDriver = {
@@ -121,6 +121,154 @@ describe('ConnectionProvider', () => {
         { id: 'schema1.table2', name: 'table2' },
         { id: 'schema2.table1', name: 'table1' },
         { id: 'schema2.table2', name: 'table2' }
+      ]);
+
+      expect(mockQuery).toHaveBeenCalledTimes(1);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+    });
+  });
+
+  describe('getTablesDetails', () => {
+    test('should throw error is table name is not in correct format', async () => {
+      const tableName = 'table1';
+      const mockTableSchema = jest.fn().mockResolvedValueOnce({
+        schema1: { table1: [], table2: [] },
+        schema2: { table1: [], table2: [] }
+      });
+      // @ts-ignore
+      const testDriver: BaseDriver = {
+        tablesSchema: mockTableSchema
+      };
+      const spy = jest
+        .spyOn<ConnectionProvider, any>(
+          ConnectionProvider.prototype,
+          'getDriver'
+        )
+        .mockReturnValueOnce(testDriver);
+      const provider = new ConnectionProvider('bigquery', {});
+      await expect(provider.getTablesDetails(tableName)).rejects.toThrow(
+        new Error(
+          `Incorrect format for 'table1'. Should be in '<schema>.<table>' format`
+        )
+      );
+
+      expect(mockTableSchema).toHaveBeenCalledTimes(0);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+    });
+
+    test('should return table schema', async () => {
+      const tableName = 'schema1.table1';
+      const mockTableSchema = jest.fn().mockResolvedValueOnce({
+        schema1: {
+          table1: [
+            {
+              name: 'order_no',
+              type: 'STRING',
+              mode: 'NULLABLE'
+            },
+            {
+              name: 'booking_time',
+              type: 'TIMESTAMP',
+              mode: 'NULLABLE'
+            }
+          ],
+          table2: []
+        },
+        schema2: { table1: [], table2: [] }
+      });
+      // @ts-ignore
+      const testDriver: BaseDriver = {
+        tablesSchema: mockTableSchema
+      };
+      const spy = jest
+        .spyOn<ConnectionProvider, any>(
+          ConnectionProvider.prototype,
+          'getDriver'
+        )
+        .mockReturnValueOnce(testDriver);
+      const provider = new ConnectionProvider('bigquery', {});
+      const result = await provider.getTablesDetails(tableName);
+      expect(result).toEqual([
+        { mode: 'NULLABLE', name: 'order_no', type: 'STRING' },
+        { mode: 'NULLABLE', name: 'booking_time', type: 'TIMESTAMP' }
+      ]);
+
+      expect(mockTableSchema).toHaveBeenCalledTimes(1);
+      expect(mockTableSchema).toHaveBeenCalledWith(/* empty */);
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+    });
+
+    test('should return table schema for postgres', async () => {
+      const tableName = 'schema1.table1';
+      const mockQuery = jest.fn().mockResolvedValueOnce([
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'actor_id',
+          data_type: 'integer'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'last_update',
+          data_type: 'timestamp without time zone'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'first_name',
+          data_type: 'character varying'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'last_name',
+          data_type: 'character varying'
+        }
+      ]);
+      // @ts-ignore
+      const testDriver: BaseDriver = {
+        query: mockQuery
+      };
+      const spy = jest
+        .spyOn<ConnectionProvider, any>(
+          ConnectionProvider.prototype,
+          'getDriver'
+        )
+        .mockReturnValueOnce(testDriver);
+      const provider = new ConnectionProvider('postgres', {});
+      const result = await provider.getTablesDetails(tableName);
+      expect(result).toEqual([
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'actor_id',
+          data_type: 'integer'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'last_update',
+          data_type: 'timestamp without time zone'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'first_name',
+          data_type: 'character varying'
+        },
+        {
+          table_catalog: 'schema1',
+          table_name: 'actor',
+          column_name: 'last_name',
+          data_type: 'character varying'
+        }
       ]);
 
       expect(mockQuery).toHaveBeenCalledTimes(1);
