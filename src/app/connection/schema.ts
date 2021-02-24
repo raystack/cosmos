@@ -1,7 +1,13 @@
 import * as Joi from 'joi';
 import { SupportedDBType } from 'src/types';
 
-const supportedDBs: Array<SupportedDBType> = ['postgres'];
+const supportedDBs: Array<SupportedDBType> = ['postgres', 'mysql'];
+const suppotedTypeValidation = Joi.string()
+  .valid(...supportedDBs)
+  .messages({
+    'any.required': `"type" is a required field`,
+    'any.only': `"{#value}" is not supported database`
+  });
 
 const connectionResponse = Joi.object({
   urn: Joi.string(),
@@ -26,9 +32,7 @@ export const getTableParams = Joi.object({
 export const createPayload = Joi.object()
   .keys({
     name: Joi.string(),
-    type: Joi.string()
-      .required()
-      .valid(...supportedDBs),
+    type: suppotedTypeValidation.required(),
     credentials: Joi.object().required()
   })
   .options({
@@ -39,7 +43,7 @@ export const createPayload = Joi.object()
 export const updatePayload = Joi.object()
   .keys({
     name: Joi.string(),
-    type: Joi.string().valid(...supportedDBs),
+    type: suppotedTypeValidation,
     credentials: Joi.object()
   })
   .options({

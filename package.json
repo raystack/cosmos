@@ -55,6 +55,7 @@
     "typescript": "^4.2.2"
   },
   "dependencies": {
+    "@cubejs-backend/mysql-driver": "0.26.25",
     "@cubejs-backend/postgres-driver": "0.26.25",
     "@cubejs-backend/query-orchestrator": "0.26.25",
     "@cubejs-backend/schema-compiler": "0.26.25",
