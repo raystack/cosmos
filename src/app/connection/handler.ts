@@ -14,7 +14,7 @@ export const list = {
   },
   handler: async (_req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const connections = await Resource.list();
-    return { connections };
+    return { data: connections };
   }
 };
 
@@ -33,7 +33,7 @@ export const create = {
     const connection = await Resource.create(
       <ICreateConnectionPayload>req.payload
     );
-    return { connection };
+    return { data: connection };
   }
 };
 
@@ -53,7 +53,7 @@ export const get = {
     if (!connection) {
       throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
     }
-    return { connection };
+    return { data: connection };
   }
 };
 
@@ -77,7 +77,7 @@ export const update = {
     if (!connection) {
       throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
     }
-    return { connection };
+    return { data: connection };
   }
 };
 
@@ -85,8 +85,8 @@ export const getFields = {
   description: 'Get Connection fields',
   tags: ['api'],
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const data = await Resource.getFields();
-    return { data };
+    const fields = await Resource.getFields();
+    return { data: fields };
   }
 };
 
