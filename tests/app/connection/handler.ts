@@ -46,7 +46,7 @@ describe('Connection::Handler', () => {
     test('returns empty list if no connections in db', async () => {
       const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce([]);
       const expectedResult = {
-        connections: []
+        data: []
       };
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
@@ -61,7 +61,7 @@ describe('Connection::Handler', () => {
         .spyOn(Resource, 'list')
         .mockResolvedValueOnce(connections);
       const expectedResult = {
-        connections
+        data: connections
       };
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
@@ -95,7 +95,7 @@ describe('Connection::Handler', () => {
       const connection = Factory.Connection.data.build({ urn });
       const spy = jest.spyOn(Resource, 'get').mockResolvedValueOnce(connection);
       const expectedResult = {
-        connection
+        data: connection
       };
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
@@ -142,7 +142,7 @@ describe('Connection::Handler', () => {
         .spyOn(Resource, 'create')
         .mockResolvedValueOnce(connection);
       const expectedResult = {
-        connection
+        data: connection
       };
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
@@ -211,7 +211,7 @@ describe('Connection::Handler', () => {
         .spyOn(Resource, 'update')
         .mockResolvedValueOnce(connection);
       const expectedResult = {
-        connection
+        data: connection
       };
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);

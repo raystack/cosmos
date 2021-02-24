@@ -11,7 +11,7 @@ const connectionResponse = Joi.object({
 }).unknown(true);
 
 export const listResponse = Joi.object({
-  connections: Joi.array().items(connectionResponse)
+  data: Joi.array().items(connectionResponse)
 });
 
 export const getParams = Joi.object({
@@ -48,5 +48,5 @@ export const updatePayload = Joi.object()
   });
 
 export const createResponse = Joi.object({
-  connection: connectionResponse
+  data: connectionResponse
 });
