@@ -51,15 +51,15 @@ export default class ConnectionProvider {
 
   public async test(): Promise<string> {
     try {
-      const result = <unknown>await this.driver.testConnection();
-      return result ? 'Success' : 'Failure';
+      await this.driver.testConnection();
+      return 'Success';
     } catch (err) {
       console.log(err);
       return 'Failure';
     }
   }
 
-  public async getPGTablesList(): Promise<ITableListItem[]> {
+  private async getPGTablesList(): Promise<ITableListItem[]> {
     const tables = <IPGTablesResult[]>(
       await this.driver.query(PG_TABLE_QUERY, [])
     );
