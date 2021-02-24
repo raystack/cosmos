@@ -45,6 +45,11 @@ module.exports = {
         method: 'GET',
         path: '/connections/{urn}/tables/{table_name}',
         options: Handler.getTable
+      },
+      {
+        method: 'GET',
+        path: '/connections/{urn}/tables/{table_name}/cube',
+        options: Handler.getTableCube
       }
     ]);
   }

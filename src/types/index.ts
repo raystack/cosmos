@@ -42,9 +42,18 @@ export interface ICreateConnectionTransformedPayload
   credentials: string;
 }
 
+export interface IPGTablesResult {
+  table_schema: string;
+  table_name: string;
+}
 export interface IPGTablesDetails {
   table_catalog: string;
   table_name: string;
   column_name: string;
   data_type: string;
+}
+
+export interface ITableListItem {
+  name: string;
+  id: string;
 }

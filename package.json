@@ -32,7 +32,7 @@
     "@types/hapi__vision": "^5.5.2",
     "@types/jest": "^26.0.20",
     "@types/mongoose": "^5.10.3",
-    "@types/node": "^14.14.28",
+    "@types/node": "^14.14.31",
     "@types/ramda": "^0.27.38",
     "@types/rosie": "^0.0.38",
     "@types/uuid": "^8.3.0",
@@ -40,7 +40,7 @@
     "@typescript-eslint/parser": "^4.15.1",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^7.2.0",
+    "eslint-config-prettier": "^8.0.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
@@ -52,11 +52,12 @@
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.1.5"
+    "typescript": "^4.2.2"
   },
   "dependencies": {
     "@cubejs-backend/postgres-driver": "0.26.25",
     "@cubejs-backend/query-orchestrator": "0.26.25",
+    "@cubejs-backend/schema-compiler": "0.26.25",
     "@cubejs-backend/server-core": "0.26.25",
     "@hapi/boom": "^9.1.1",
     "@hapi/glue": "^8.0.0",

@@ -134,3 +134,21 @@ export const getTable = {
     return { data };
   }
 };
+
+export const getTableCube = {
+  description: 'Get table cube schema',
+  tags: ['api'],
+  validate: {
+    params: Schema.getTableParams
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.getTableCube(
+      req.params.urn,
+      req.params.table_name
+    );
+    if (!data) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data };
+  }
+};
