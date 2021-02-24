@@ -3,6 +3,7 @@ import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
 import Hapi from '@hapi/hapi';
+import Boom from '@hapi/boom';
 import * as Config from './config';
 import Logging from '../plugins/logging';
 
@@ -33,6 +34,11 @@ const manifest: Manifest = {
       cors: true,
       timeout: {
         socket: false
+      },
+      validate: {
+        failAction: async (_request, _h, err) => {
+          throw Boom.badRequest(err?.message);
+        }
       }
     }
   },
