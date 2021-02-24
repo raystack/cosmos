@@ -12,19 +12,18 @@ import { ScaffoldingSchema } from '@cubejs-backend/schema-compiler/dist/src/scaf
 const PG_TABLE_QUERY = `SELECT table_name, table_schema FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public';`;
 const PG_DESCRIBE_TABLE_QUERY = `SELECT table_catalog, table_name, column_name, data_type FROM information_schema.columns WHERE table_name=$1;`;
 
+type Config = Record<string, string | number | boolean>;
+
 export default class ConnectionProvider {
-  credentials: Record<string, string | number>;
+  config: Config;
 
   dbType: SupportedDBType;
 
   driver: BaseDriver;
 
-  constructor(
-    type: SupportedDBType,
-    credentials: Record<string, string | number>
-  ) {
+  constructor(type: SupportedDBType, config: Config) {
     this.dbType = type;
-    this.credentials = credentials;
+    this.config = config;
     this.driver = this.getDriver();
   }
 
@@ -37,7 +36,17 @@ export default class ConnectionProvider {
 
   private getDriver(): BaseDriver {
     const Module = this.getDriverModule();
-    return new Module({ ...this.credentials, readOnly: true });
+    const config: Config = {
+      ...this.config,
+      readOnly: true
+    };
+    if (this.dbType === 'bigquery' && this.config.credentials) {
+      const credentials = JSON.parse(
+        Buffer.from(<string>this.config.credentials, 'base64').toString('utf8')
+      );
+      config.credentials = credentials;
+    }
+    return new Module(config);
   }
 
   public async test(): Promise<string> {

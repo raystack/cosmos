@@ -10,6 +10,15 @@ const fieldsMap: IFieldsMap = {
       { name: 'password', type: 'string' }
     ]
   },
+  mysql: {
+    fields: [
+      { name: 'host', type: 'string' },
+      { name: 'port', type: 'number' },
+      { name: 'database', type: 'string' },
+      { name: 'user', type: 'string' },
+      { name: 'password', type: 'string' }
+    ]
+  },
   bigquery: {
     fields: [
       { name: 'projectId', type: 'string' },
