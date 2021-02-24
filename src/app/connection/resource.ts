@@ -3,7 +3,8 @@ import {
   ICreateConnectionPayload,
   IConnectionResponse,
   IFieldsMap,
-  IPGTablesDetails
+  IPGTablesDetails,
+  ITableListItem
 } from 'src/types';
 import ConnectionProvider from 'src/providers/connection';
 import * as Transformer from './transformer';
@@ -51,7 +52,9 @@ export const testConnection = async (urn: string): Promise<string | null> => {
   return provider.test();
 };
 
-export const listTables = async (urn: string): Promise<string[] | null> => {
+export const listTables = async (
+  urn: string
+): Promise<ITableListItem[] | null> => {
   const connection = await Connection.findByUrn(urn);
   if (!connection) return null;
   const transformedData = await Transformer.get(connection);
@@ -74,4 +77,18 @@ export const getTable = async (
     transformedData.credentials
   );
   return provider.getTablesDetails(table);
+};
+
+export const getTableCube = async (
+  urn: string,
+  table: string
+): Promise<unknown> => {
+  const connection = await Connection.findByUrn(urn);
+  if (!connection) return null;
+  const transformedData = await Transformer.get(connection);
+  const provider = new ConnectionProvider(
+    transformedData.type,
+    transformedData.credentials
+  );
+  return provider.getTableCube(table, urn);
 };

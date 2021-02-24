@@ -1,8 +1,15 @@
 import { CubejsServerCore } from '@cubejs-backend/server-core';
 import { BaseDriver } from '@cubejs-backend/query-orchestrator';
-import { SupportedDBType, IPGTablesDetails } from 'src/types';
+import {
+  SupportedDBType,
+  IPGTablesDetails,
+  ITableListItem,
+  IPGTablesResult
+} from 'src/types';
+import { ScaffoldingTemplate } from '@cubejs-backend/schema-compiler/dist/src/scaffolding/ScaffoldingTemplate';
+import { ScaffoldingSchema } from '@cubejs-backend/schema-compiler/dist/src/scaffolding/ScaffoldingSchema';
 
-const PG_TABLE_QUERY = `SELECT table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public';`;
+const PG_TABLE_QUERY = `SELECT table_name, table_schema FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='public';`;
 const PG_DESCRIBE_TABLE_QUERY = `SELECT table_catalog, table_name, column_name, data_type FROM information_schema.columns WHERE table_name=$1;`;
 
 export default class ConnectionProvider {
@@ -43,25 +50,28 @@ export default class ConnectionProvider {
     }
   }
 
-  public async getPGTablesList(): Promise<string[]> {
-    const tables = <IPGTablesDetails[]>(
+  public async getPGTablesList(): Promise<ITableListItem[]> {
+    const tables = <IPGTablesResult[]>(
       await this.driver.query(PG_TABLE_QUERY, [])
     );
-    return tables.map((t) => t.table_name);
+    return tables.map(({ table_schema: schema, table_name: table }) => ({
+      name: table,
+      id: `${schema}.${table}`
+    }));
   }
 
-  public async getTablesList(): Promise<string[]> {
+  public async getTablesList(): Promise<ITableListItem[]> {
     switch (this.dbType) {
       case 'postgres':
         return this.getPGTablesList();
       default: {
         const schemas = await this.driver.tablesSchema();
-        return Object.keys(schemas).reduce((acc: string[], schema: string) => {
-          const tables = Object.keys(schemas[schema]).map(
-            (table) => `${schema}.${table}`
-          );
+        return Object.keys(schemas).reduce((acc, schema) => {
+          const tables: ITableListItem[] = Object.keys(
+            schemas[schema]
+          ).map((table) => ({ name: table, id: `${schema}.${table}` }));
           return [...acc, ...tables];
-        }, []);
+        }, <ITableListItem[]>[]);
       }
     }
   }
@@ -93,5 +103,17 @@ export default class ConnectionProvider {
         return schemas[schema][table];
       }
     }
+  }
+
+  public async getTableCube(tableName: string, urn: string): Promise<unknown> {
+    const schemas = await this.driver.tablesSchema();
+
+    const template = new ScaffoldingTemplate(schemas, this.driver);
+    const scaffoldingSchema = new ScaffoldingSchema(schemas);
+    scaffoldingSchema.prepareTableNamesToTables([tableName]);
+    const tableSchema = scaffoldingSchema.tableSchema(tableName, true);
+    return template.renderFile(
+      template.schemaDescriptorForTable(tableSchema, { dataSource: urn })
+    );
   }
 }
