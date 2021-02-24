@@ -355,11 +355,15 @@ describe('Connection::Handler', () => {
     });
 
     test('should return the tables list', async () => {
-      const spy = jest
-        .spyOn(Resource, 'listTables')
-        .mockResolvedValueOnce(['table-1', 'table-2']);
+      const spy = jest.spyOn(Resource, 'listTables').mockResolvedValueOnce([
+        { name: 'table-1', id: 'table-1' },
+        { name: 'table-2', id: 'table-2' }
+      ]);
       const expectedResult = {
-        data: ['table-1', 'table-2']
+        data: [
+          { name: 'table-1', id: 'table-1' },
+          { name: 'table-2', id: 'table-2' }
+        ]
       };
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(200);
