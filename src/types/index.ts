@@ -2,7 +2,7 @@
 import { Document } from 'mongoose';
 
 // * Important: need to install cube driver for the supported dbs
-export type SupportedDBType = 'postgres' | 'mysql';
+export type SupportedDBType = 'postgres' | 'mysql' | 'bigquery';
 
 export interface ICreateConnectionPayload {
   name: string;

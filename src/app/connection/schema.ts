@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { SupportedDBType } from 'src/types';
 
-const supportedDBs: Array<SupportedDBType> = ['postgres', 'mysql'];
+const supportedDBs: Array<SupportedDBType> = ['postgres', 'mysql', 'bigquery'];
 const suppotedTypeValidation = Joi.string()
   .valid(...supportedDBs)
   .messages({
