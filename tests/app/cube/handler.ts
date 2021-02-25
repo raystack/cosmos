@@ -80,4 +80,67 @@ describe('Cube::Handler', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('create', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'POST',
+        url: `/cubes`
+      };
+    });
+    test('should create cube', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = payload;
+      const cube = Factory.Cube.data.build({ urn });
+      const spy = jest.spyOn(Resource, 'create').mockResolvedValueOnce(cube);
+      const expectedResult = {
+        data: cube
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should throw 400 error if payload is not valid', async () => {
+      request.payload = {};
+      const cube = Factory.Cube.data.build({ urn });
+      const spy = jest.spyOn(Resource, 'create').mockResolvedValueOnce(cube);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(400);
+      expect(response.result.error).toBe('Bad Request');
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should throw 500 error if create fails', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = payload;
+      const spy = jest
+        .spyOn(Resource, 'create')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should ignore the extra keys in payload', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = { ...payload, extra: 'extra payload' };
+      const cube = Factory.Cube.data.build({ urn, ...payload });
+      const spy = jest.spyOn(Resource, 'create').mockResolvedValueOnce(cube);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).not.toHaveBeenCalledWith({
+        ...payload,
+        extra: 'extra payload'
+      });
+      expect(spy).toHaveBeenCalledWith(payload);
+    });
+  });
 });

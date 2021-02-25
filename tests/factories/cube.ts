@@ -10,3 +10,9 @@ export const data = new Factory()
     createdAt: () => new Date(),
     updatedAt: () => new Date()
   });
+
+export const payload = new Factory().attrs({
+  connectionUrn: faker.random.uuid(),
+  tableName: faker.lorem.word(),
+  content: faker.lorem.paragraph()
+});
