@@ -10,6 +10,16 @@ export interface ICreateConnectionPayload {
   credentials: Record<string, string | number>;
 }
 
+export interface ICreateCubePayload {
+  connectionUrn: string;
+  tableName: string;
+  content: string;
+}
+
+export interface ICreateCubeTransformedPayload extends ICreateCubePayload {
+  urn: string;
+}
+
 export interface IConnection
   extends Omit<ICreateConnectionPayload, 'credentials'> {
   urn: string;

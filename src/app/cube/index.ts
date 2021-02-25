@@ -10,6 +10,11 @@ module.exports = {
         method: 'GET',
         path: '/cubes',
         options: Handler.list
+      },
+      {
+        method: 'POST',
+        path: '/cubes',
+        options: Handler.create
       }
     ]);
   }

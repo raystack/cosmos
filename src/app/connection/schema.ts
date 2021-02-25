@@ -31,7 +31,7 @@ export const getTableParams = Joi.object({
 
 export const createPayload = Joi.object()
   .keys({
-    name: Joi.string(),
+    name: Joi.string().required(),
     type: suppotedTypeValidation.required(),
     credentials: Joi.object().required()
   })
