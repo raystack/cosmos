@@ -61,6 +61,12 @@ const manifest: Manifest = {
         }
       },
       {
+        plugin: '../app/cube/index',
+        routes: {
+          prefix: '/api'
+        }
+      },
+      {
         plugin: Inert
       },
       {
