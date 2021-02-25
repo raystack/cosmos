@@ -8,7 +8,7 @@
     "format": "prettier --check 'src/**/*.ts'",
     "format:fix": "npm run format -- --write",
     "start": "node build/server.js",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "ttsc -p tsconfig.build.json",
     "dev": "nodemon",
     "test": "jest"
   },
@@ -52,7 +52,9 @@
     "ts-jest": "^26.5.2",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.2.2"
+    "ttypescript": "^1.5.12",
+    "typescript": "^4.2.2",
+    "typescript-transform-paths": "^2.2.3"
   },
   "dependencies": {
     "@cubejs-backend/bigquery-driver": "0.26.30",
