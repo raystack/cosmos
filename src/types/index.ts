@@ -20,6 +20,17 @@ export interface IConnection
 
 export type IConnectionDocument = IConnection & Document;
 
+export interface ICube {
+  urn: string;
+  connectionUrn: string;
+  tableName: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ICubeDocument = ICube & Document;
+
 export interface IConnectionResponse extends Omit<IConnection, 'credentials'> {
   credentials: Record<string, string | number>;
 }
