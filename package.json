@@ -1,6 +1,6 @@
 {
   "name": "enigma",
-  "version": "1.0.0",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -146,5 +146,8 @@
     "ignorePatterns": [
       "build/**/*.js"
     ]
+  },
+  "directories": {
+    "test": "tests"
   }
 }
