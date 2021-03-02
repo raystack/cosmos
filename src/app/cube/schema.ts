@@ -32,3 +32,7 @@ export const listResponse = Joi.object({
 export const createResponse = Joi.object({
   data: cubeResponse
 });
+
+export const getParams = Joi.object({
+  urn: Joi.string().required()
+});

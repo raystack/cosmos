@@ -77,4 +77,24 @@ describe('Cube::Resource', () => {
       expect(cubeSpy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('get', () => {
+    test('should pass urn to findByUrn', async () => {
+      const cube = new Cube();
+      const urn = 'test-urn';
+      const spy = jest.spyOn(Cube, 'findByUrn').mockResolvedValueOnce(cube);
+      await Resource.get(urn);
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return null if cube not found', async () => {
+      const urn = 'test-urn';
+      const spy = jest.spyOn(Cube, 'findByUrn').mockResolvedValueOnce(null);
+      const result = await Resource.get(urn);
+      expect(result).toBeNull();
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

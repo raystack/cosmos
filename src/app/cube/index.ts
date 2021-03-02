@@ -15,6 +15,11 @@ module.exports = {
         method: 'POST',
         path: '/cubes',
         options: Handler.create
+      },
+      {
+        method: 'GET',
+        path: '/cubes/{urn}',
+        options: Handler.get
       }
     ]);
   }
