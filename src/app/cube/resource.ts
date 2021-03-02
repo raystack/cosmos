@@ -1,9 +1,11 @@
 import Cube from 'src/models/cube';
-import { ICubeDocument, ICreateCubePayload } from 'src/types';
+import { ICubeDocument, ICreateCubePayload, ICubeListQuery } from 'src/types';
 import * as Transformer from './transformer';
 
-export const list = async (): Promise<ICubeDocument[]> => {
-  const cubes = await Cube.list();
+export const list = async (
+  query: ICubeListQuery = {}
+): Promise<ICubeDocument[]> => {
+  const cubes = await Cube.list(query);
   return cubes;
 };
 
