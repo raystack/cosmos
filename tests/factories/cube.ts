@@ -4,7 +4,7 @@ import faker from 'faker';
 export const data = new Factory()
   .sequence('urn', () => faker.random.uuid())
   .attrs({
-    connectionUrn: faker.random.uuid(),
+    connection: faker.random.uuid(),
     tableName: faker.lorem.word(),
     content: faker.lorem.paragraph(),
     createdAt: () => new Date(),
@@ -12,7 +12,7 @@ export const data = new Factory()
   });
 
 export const payload = new Factory().attrs({
-  connectionUrn: faker.random.uuid(),
+  connection: faker.random.uuid(),
   tableName: faker.lorem.word(),
   content: faker.lorem.paragraph()
 });

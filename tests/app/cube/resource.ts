@@ -15,7 +15,7 @@ describe('Cube::Resource', () => {
       const expectedResult: ICubeDocument[] = [];
       const result = await Resource.list();
       expect(result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -25,7 +25,22 @@ describe('Cube::Resource', () => {
       const expectedResult: ICubeDocument[] = cubes;
       const result = await Resource.list();
       expect(result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return cube list based on the query', async () => {
+      const cubes = [
+        new Cube({ urn: 1, connection: 'test-connection' }),
+        new Cube({ urn: 2, connection: 'test-connection' })
+      ];
+      const spy = jest.spyOn(Cube, 'list').mockResolvedValueOnce(cubes);
+      const expectedResult: ICubeDocument[] = cubes;
+      const result = await Resource.list({
+        connection: 'test-connection'
+      });
+      expect(result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith({ connection: 'test-connection' });
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
@@ -35,7 +50,7 @@ describe('Cube::Resource', () => {
       const data = {
         name: 'test',
         content: 'cube content',
-        connectionUrn: 'connection-urn',
+        connection: 'connection-urn',
         tableName: 'table1'
       };
       const urn = 'test-urn';

@@ -1,9 +1,9 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
-import { ICubeDocument } from 'src/types';
+import { ICubeDocument, ICubeListQuery } from 'src/types';
 
 export interface ICubeModel extends Model<ICubeDocument> {
-  list(): Promise<Array<ICubeDocument>>;
+  list(query: ICubeListQuery): Promise<Array<ICubeDocument>>;
   findByUrn(urn: string): Promise<ICubeDocument | null>;
   updateByUrn(urn: string, data: ICubeDocument): Promise<ICubeDocument | null>;
 }
@@ -14,10 +14,10 @@ const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
       unique: true,
       trim: true
     },
-    connectionUrn: {
+    connection: {
       type: String,
       trim: true,
-      required: 'connectionUrn is required'
+      required: 'connection is required'
     },
     tableName: {
       type: String,
@@ -39,8 +39,8 @@ const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
   }
 );
 
-CubeSchema.statics.list = function list() {
-  return this.find({}, { _id: 0 }).lean().exec();
+CubeSchema.statics.list = function list(query: ICubeListQuery = {}) {
+  return this.find(query, { _id: 0 }).lean().exec();
 };
 
 CubeSchema.statics.findByUrn = function findByUrn(urn) {

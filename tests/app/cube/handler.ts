@@ -52,7 +52,7 @@ describe('Cube::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -65,7 +65,31 @@ describe('Cube::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns throw 400 error if query is not valid', async () => {
+      request.url = '/cubes?connection=';
+      const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce([]);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(400);
+      expect(response.result.error).toBe('Bad Request');
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should pass the valid query', async () => {
+      const connection = 'test-connection';
+      const cubes = Factory.Cube.data.buildList(2, { connection });
+      request.url = `/cubes?connection=${connection}`;
+      const expectedResult = {
+        data: cubes
+      };
+      const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce(cubes);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith({ connection });
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -76,7 +100,7 @@ describe('Cube::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(500);
       expect(response.result.error).toBe('Internal Server Error');
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

@@ -11,9 +11,13 @@ export interface ICreateConnectionPayload {
 }
 
 export interface ICreateCubePayload {
-  connectionUrn: string;
+  connection: string;
   tableName: string;
   content: string;
+}
+
+export interface ICubeListQuery {
+  connection?: string;
 }
 
 export interface ICreateCubeTransformedPayload extends ICreateCubePayload {
@@ -32,7 +36,7 @@ export type IConnectionDocument = IConnection & Document;
 
 export interface ICube {
   urn: string;
-  connectionUrn: string;
+  connection: string;
   tableName: string;
   content: string;
   createdAt: string;

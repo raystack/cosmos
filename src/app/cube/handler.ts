@@ -1,13 +1,16 @@
 import Hapi from '@hapi/hapi';
-import { ICreateCubePayload } from 'src/types';
+import { ICreateCubePayload, ICubeListQuery } from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
 
 export const list = {
   description: 'List Cubes',
   tags: ['api'],
-  handler: async (_req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const connections = await Resource.list();
+  validate: {
+    query: Schema.listQuery
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const connections = await Resource.list(<ICubeListQuery>req.query);
     return { data: connections };
   }
 };
