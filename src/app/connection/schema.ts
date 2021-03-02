@@ -20,6 +20,23 @@ export const listResponse = Joi.object({
   data: Joi.array().items(connectionResponse)
 });
 
+export const listTableResponse = Joi.object({
+  data: Joi.array().items(
+    Joi.object({
+      name: Joi.string(),
+      id: Joi.string()
+    })
+  )
+});
+
+export const getTableCubeResponse = Joi.object({
+  data: Joi.string()
+});
+
+export const testResponse = Joi.object({
+  data: Joi.string().valid('Success', 'Failure')
+});
+
 export const getParams = Joi.object({
   urn: Joi.string().required()
 });
@@ -53,4 +70,19 @@ export const updatePayload = Joi.object()
 
 export const createResponse = Joi.object({
   data: connectionResponse
+});
+
+export const getFieldsResponse = Joi.object({
+  data: Joi.object().pattern(
+    Joi.string().valid(...supportedDBs),
+    Joi.object({
+      fields: Joi.array().items(
+        Joi.object({
+          name: Joi.string(),
+          type: Joi.string(),
+          description: Joi.string()
+        })
+      )
+    })
+  )
 });

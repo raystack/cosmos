@@ -49,7 +49,7 @@ export default class ConnectionProvider {
     return new Module(config);
   }
 
-  public async test(): Promise<string> {
+  public async test(): Promise<'Success' | 'Failure'> {
     try {
       await this.driver.testConnection();
       return 'Success';
