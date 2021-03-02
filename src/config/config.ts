@@ -16,10 +16,7 @@ const config = {
   },
   port: {
     api: {
-      $filter: 'env',
-      test: 9000,
-      production: process.env.PORT,
-      integration: process.env.PORT,
+      $env: 'PORT',
       $default: 8000
     }
   },
