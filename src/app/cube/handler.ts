@@ -9,6 +9,11 @@ export const list = {
   validate: {
     query: Schema.listQuery
   },
+  response: {
+    status: {
+      200: Schema.listResponse
+    }
+  },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const connections = await Resource.list(<ICubeListQuery>req.query);
     return { data: connections };
@@ -20,6 +25,11 @@ export const create = {
   tags: ['api'],
   validate: {
     payload: Schema.createPayload
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const cube = await Resource.create(<ICreateCubePayload>req.payload);
