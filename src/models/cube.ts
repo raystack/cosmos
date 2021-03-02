@@ -1,11 +1,14 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
-import { ICubeDocument, ICubeListQuery } from 'src/types';
+import { IUpdateCubePayload, ICubeDocument, ICubeListQuery } from 'src/types';
 
 export interface ICubeModel extends Model<ICubeDocument> {
   list(query: ICubeListQuery): Promise<Array<ICubeDocument>>;
   findByUrn(urn: string): Promise<ICubeDocument | null>;
-  updateByUrn(urn: string, data: ICubeDocument): Promise<ICubeDocument | null>;
+  updateByUrn(
+    urn: string,
+    data: IUpdateCubePayload
+  ): Promise<ICubeDocument | null>;
 }
 const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
   {

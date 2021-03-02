@@ -97,4 +97,38 @@ describe('Cube::Resource', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update', () => {
+    test('should return null if cube not found', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        content: 'cube content',
+        connection: 'connection-urn',
+        tableName: 'table1'
+      };
+      const spy = jest.spyOn(Cube, 'updateByUrn').mockResolvedValueOnce(null);
+
+      const result = await Resource.update(urn, data);
+      expect(result).toBeNull();
+      expect(spy).toHaveBeenCalledWith(urn, data);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should update the cube', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        content: 'cube content',
+        connection: 'connection-urn',
+        tableName: 'table1'
+      };
+      const cube = new Cube({ ...data, urn });
+      const spy = jest.spyOn(Cube, 'updateByUrn').mockResolvedValueOnce(cube);
+      const result = await Resource.update(urn, data);
+      expect(result?.urn).toBe(urn);
+      expect(spy).toHaveBeenCalledWith(urn, data);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

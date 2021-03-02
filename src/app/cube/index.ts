@@ -20,6 +20,11 @@ module.exports = {
         method: 'GET',
         path: '/cubes/{urn}',
         options: Handler.get
+      },
+      {
+        method: 'PUT',
+        path: '/cubes/{urn}',
+        options: Handler.update
       }
     ]);
   }
