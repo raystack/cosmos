@@ -84,7 +84,12 @@ export const update = {
 export const getFields = {
   description: 'Get Connection fields',
   tags: ['api'],
-  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+  response: {
+    status: {
+      200: Schema.getFieldsResponse
+    }
+  },
+  handler: async (_req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const fields = await Resource.getFields();
     return { data: fields };
   }
@@ -95,6 +100,11 @@ export const testConnection = {
   tags: ['api'],
   validate: {
     params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.testResponse
+    }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const data = await Resource.testConnection(req.params.urn);
@@ -110,6 +120,11 @@ export const listTables = {
   tags: ['api'],
   validate: {
     params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.listTableResponse
+    }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const data = await Resource.listTables(req.params.urn);
@@ -140,6 +155,11 @@ export const getTableCube = {
   tags: ['api'],
   validate: {
     params: Schema.getTableParams
+  },
+  response: {
+    status: {
+      200: Schema.getTableCubeResponse
+    }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const cube = await Resource.getTableCube(
