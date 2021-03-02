@@ -1,4 +1,5 @@
 import Hapi from '@hapi/hapi';
+import Boom from '@hapi/boom';
 import { ICreateCubePayload, ICubeListQuery } from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
@@ -33,6 +34,26 @@ export const create = {
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const cube = await Resource.create(<ICreateCubePayload>req.payload);
+    return { data: cube };
+  }
+};
+
+export const get = {
+  description: 'Get Cube by urn',
+  tags: ['api'],
+  validate: {
+    params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const cube = await Resource.get(req.params.urn);
+    if (!cube) {
+      throw Boom.notFound(`Cube not found for urn: ${req.params.urn}`);
+    }
     return { data: cube };
   }
 };

@@ -167,4 +167,47 @@ describe('Cube::Handler', () => {
       expect(spy).toHaveBeenCalledWith(payload);
     });
   });
+
+  describe('get', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/cubes/${urn}`
+      };
+    });
+    test('return cube by urn', async () => {
+      const cube = Factory.Cube.data.build({ urn });
+      const spy = jest.spyOn(Resource, 'get').mockResolvedValueOnce(cube);
+      const expectedResult = {
+        data: cube
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 404 when cube not found', async () => {
+      const spy = jest.spyOn(Resource, 'get').mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when get call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'get')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

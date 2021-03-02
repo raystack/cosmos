@@ -16,3 +16,7 @@ export const create = async (
   const connection = await Cube.create(data);
   return connection;
 };
+
+export const get = async (urn: string): Promise<ICubeDocument | null> => {
+  return Cube.findByUrn(urn);
+};
