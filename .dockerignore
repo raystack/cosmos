@@ -5,6 +5,9 @@ npm-debug.log
 README.md
 LICENSE
 .vscode
-test
+tests
 .idea/
+.github
+.temp
+coverage
 package-lock.json
