@@ -203,7 +203,7 @@ describe('Connection::Handler', () => {
         url: `/connections/${urn}`
       };
     });
-    test('return connection by urn', async () => {
+    test('should update connection by urn', async () => {
       const payload = Factory.Connection.payload.build();
       request.payload = payload;
       const connection = Factory.Connection.data.build({ urn, ...payload });

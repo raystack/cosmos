@@ -16,6 +16,12 @@ export interface ICreateCubePayload {
   content: string;
 }
 
+export interface IUpdateCubePayload {
+  connection?: string;
+  tableName?: string;
+  content?: string;
+}
+
 export interface ICubeListQuery {
   connection?: string;
 }

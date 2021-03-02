@@ -158,7 +158,7 @@ describe('Connection::Resource', () => {
         },
         type: <SupportedDBType>'postgres'
       };
-      const connection = new Connection(data);
+      const connection = new Connection({ ...data, urn });
 
       const connectionSpy = jest
         .spyOn(Connection, 'updateByUrn')
@@ -173,7 +173,7 @@ describe('Connection::Resource', () => {
       const transformerGetSpy = jest
         .spyOn(Transformer, 'get')
         // @ts-ignore
-        .mockResolvedValueOnce({ ...data, urn });
+        .mockResolvedValueOnce(connection);
 
       const result = await Resource.update(urn, data);
       expect(result?.urn).toBe(urn);

@@ -1,6 +1,10 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import { ICreateCubePayload, ICubeListQuery } from 'src/types';
+import {
+  ICreateCubePayload,
+  ICubeListQuery,
+  IUpdateCubePayload
+} from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
 
@@ -55,5 +59,29 @@ export const get = {
       throw Boom.notFound(`Cube not found for urn: ${req.params.urn}`);
     }
     return { data: cube };
+  }
+};
+
+export const update = {
+  description: 'Update Connection by urn',
+  tags: ['api'],
+  validate: {
+    payload: Schema.updatePayload,
+    params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const connection = await Resource.update(
+      req.params.urn,
+      <IUpdateCubePayload>req.payload
+    );
+    if (!connection) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data: connection };
   }
 };

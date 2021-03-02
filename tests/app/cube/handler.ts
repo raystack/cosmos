@@ -210,4 +210,79 @@ describe('Cube::Handler', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'PUT',
+        url: `/cubes/${urn}`
+      };
+    });
+    test('return update cube by urn', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = payload;
+      const cube = Factory.Cube.data.build({ urn, ...payload });
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(cube);
+      const expectedResult = {
+        data: cube
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 404 when cube not found', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = payload;
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const payload = Factory.Cube.payload.build();
+      request.payload = payload;
+      const spy = jest
+        .spyOn(Resource, 'update')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 400 if payload is not valid', async () => {
+      const payload = Factory.Cube.payload.build({ tableName: 1234 });
+      const cube = Factory.Cube.data.build({ urn, ...payload });
+      request.payload = payload;
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(cube);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(400);
+      expect(response.result.error).toBe('Bad Request');
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    test('should ignore the extra keys in payload', async () => {
+      const payload = Factory.Cube.payload.build();
+      const cube = Factory.Cube.data.build({ urn, ...payload });
+      request.payload = { ...payload, extra: 'extra payload' };
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(cube);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).not.toHaveBeenCalledWith(urn, {
+        ...payload,
+        extra: 'extra payload'
+      });
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+    });
+  });
 });

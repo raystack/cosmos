@@ -11,6 +11,17 @@ export const createPayload = Joi.object()
     stripUnknown: true // remove unknown keys from the validated data
   });
 
+export const updatePayload = Joi.object()
+  .keys({
+    connection: Joi.string(),
+    tableName: Joi.string(),
+    content: Joi.string()
+  })
+  .options({
+    abortEarly: false, // abort after the last validation error
+    stripUnknown: true // remove unknown keys from the validated data
+  });
+
 export const listQuery = Joi.object({
   connection: Joi.string()
 }).options({
