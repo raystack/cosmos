@@ -1,29 +1,29 @@
 import Hapi from '@hapi/hapi';
 import * as Handler from './handler';
 
-module.exports = {
+export const plugin = {
   name: 'cube',
   version: '1.0.0',
-  register(server: Hapi.Server) {
+  register: (server: Hapi.Server): void => {
     server.route([
       {
         method: 'GET',
-        path: '/cubes',
+        path: '/',
         options: Handler.list
       },
       {
         method: 'POST',
-        path: '/cubes',
+        path: '/',
         options: Handler.create
       },
       {
         method: 'GET',
-        path: '/cubes/{urn}',
+        path: '/{urn}',
         options: Handler.get
       },
       {
         method: 'PUT',
-        path: '/cubes/{urn}',
+        path: '/{urn}',
         options: Handler.update
       }
     ]);

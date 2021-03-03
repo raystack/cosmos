@@ -1,21 +1,16 @@
-import Hapi, { ServerInjectOptions, Plugin } from '@hapi/hapi';
-import * as HealthPlugin from 'src/app/health';
+import Hapi, { ServerInjectOptions } from '@hapi/hapi';
+import { plugin } from 'src/app/health';
 import * as Config from 'src/config/config';
 
 let server: Hapi.Server;
 
-interface IPlugin {
-  register: () => void | Promise<void>;
-  pkg: string;
-}
-
 beforeAll(async () => {
-  const plugins: Plugin<IPlugin>[] = [<IPlugin>HealthPlugin];
+  const plugins = [{ plugin }];
   server = new Hapi.Server({
     port: Config.get('/port/api'),
     debug: false
   });
-  await server.register(plugins);
+  await server.register(plugins, { routes: { prefix: '/ping' } });
 });
 
 afterAll(async () => {

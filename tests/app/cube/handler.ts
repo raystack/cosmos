@@ -1,15 +1,10 @@
-import Hapi, { ServerInjectOptions, Plugin } from '@hapi/hapi';
-import * as CubePlugin from 'src/app/cube';
+import Hapi, { ServerInjectOptions } from '@hapi/hapi';
+import { plugin } from 'src/app/cube';
 import * as Resource from 'src/app/cube/resource';
 import * as Config from 'src/config/config';
 import * as Factory from 'tests/factories';
 
 let server: Hapi.Server;
-
-interface IPlugin {
-  register: () => void | Promise<void>;
-  pkg: string;
-}
 
 interface IServerResponse extends Hapi.ServerInjectResponse {
   result: {
@@ -18,12 +13,12 @@ interface IServerResponse extends Hapi.ServerInjectResponse {
 }
 
 beforeAll(async () => {
-  const plugins: Plugin<IPlugin>[] = [<IPlugin>CubePlugin];
+  const plugins = [{ plugin }];
   server = new Hapi.Server({
     port: Config.get('/port/api'),
     debug: false
   });
-  await server.register(plugins);
+  await server.register(plugins, { routes: { prefix: '/api/cubes' } });
 });
 
 afterAll(async () => {
@@ -40,7 +35,7 @@ describe('Cube::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: '/cubes'
+        url: '/api/cubes'
       };
     });
 
@@ -70,7 +65,7 @@ describe('Cube::Handler', () => {
     });
 
     test('returns throw 400 error if query is not valid', async () => {
-      request.url = '/cubes?connection=';
+      request.url = '/api/cubes?connection=';
       const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce([]);
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(400);
@@ -81,7 +76,7 @@ describe('Cube::Handler', () => {
     test('should pass the valid query', async () => {
       const connection = 'test-connection';
       const cubes = Factory.Cube.data.buildList(2, { connection });
-      request.url = `/cubes?connection=${connection}`;
+      request.url = `/api/cubes?connection=${connection}`;
       const expectedResult = {
         data: cubes
       };
@@ -111,7 +106,7 @@ describe('Cube::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'POST',
-        url: `/cubes`
+        url: `/api/cubes`
       };
     });
     test('should create cube', async () => {
@@ -174,7 +169,7 @@ describe('Cube::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/cubes/${urn}`
+        url: `/api/cubes/${urn}`
       };
     });
     test('return cube by urn', async () => {
@@ -217,7 +212,7 @@ describe('Cube::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'PUT',
-        url: `/cubes/${urn}`
+        url: `/api/cubes/${urn}`
       };
     });
     test('return update cube by urn', async () => {

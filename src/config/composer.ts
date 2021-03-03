@@ -9,6 +9,8 @@ import Logging from '../plugins/logging';
 import * as Meta from '../app/meta';
 import * as ConnectionFields from '../app/connection-fields';
 import * as Connection from '../app/connection';
+import * as Cube from '../app/cube';
+import * as Health from '../app/health';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
@@ -52,9 +54,9 @@ const manifest: Manifest = {
         options: Config.get('/mongoose')
       },
       {
-        plugin: '../app/health/index',
+        plugin: Health.plugin,
         routes: {
-          prefix: '/api'
+          prefix: '/ping'
         }
       },
       {
@@ -64,9 +66,9 @@ const manifest: Manifest = {
         }
       },
       {
-        plugin: '../app/cube/index',
+        plugin: Cube.plugin,
         routes: {
-          prefix: '/api'
+          prefix: '/api/cubes'
         }
       },
       {
