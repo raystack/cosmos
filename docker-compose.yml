@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  app:
+  cosmos:
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -13,9 +13,19 @@ services:
       - mongodb
     environment:
       MONGODB_HOST: mongodb://mongodb/cosmos
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:8000/ping"]
+      interval: 20s
+      timeout: 5s
+      retries: 12
   mongodb:
     image: mongo:latest
     ports:
       - 27017:27017
     volumes:
       - ./.temp/database:/data/db
+    healthcheck:
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:27017"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
