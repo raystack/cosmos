@@ -1,9 +1,8 @@
 import * as Joi from 'joi';
-import { SupportedDBType } from 'src/types';
+import { SupportedDBs } from 'src/config/constants';
 
-const supportedDBs: Array<SupportedDBType> = ['postgres', 'mysql', 'bigquery'];
 const suppotedTypeValidation = Joi.string()
-  .valid(...supportedDBs)
+  .valid(...SupportedDBs)
   .messages({
     'any.required': `"type" is a required field`,
     'any.only': `"{#value}" is not supported database`
@@ -70,19 +69,4 @@ export const updatePayload = Joi.object()
 
 export const createResponse = Joi.object({
   data: connectionResponse
-});
-
-export const getFieldsResponse = Joi.object({
-  data: Joi.object().pattern(
-    Joi.string().valid(...supportedDBs),
-    Joi.object({
-      fields: Joi.array().items(
-        Joi.object({
-          name: Joi.string(),
-          type: Joi.string(),
-          description: Joi.string()
-        })
-      )
-    })
-  )
 });

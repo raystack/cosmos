@@ -28,11 +28,6 @@ module.exports = {
       },
       {
         method: 'GET',
-        path: '/connections-fields',
-        options: Handler.getFields
-      },
-      {
-        method: 'GET',
         path: '/connections/{urn}/test',
         options: Handler.testConnection
       },
