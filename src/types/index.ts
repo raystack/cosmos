@@ -72,6 +72,11 @@ export interface IFieldsMap {
   };
 }
 
+export interface IFieldsListItem {
+  name: SupportedDBType;
+  fields: Array<IFieldsObject>;
+}
+
 export interface ICreateConnectionTransformedPayload
   extends Omit<ICreateConnectionPayload, 'credentials'> {
   urn: string;

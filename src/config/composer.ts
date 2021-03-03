@@ -7,6 +7,8 @@ import Boom from '@hapi/boom';
 import * as Config from './config';
 import Logging from '../plugins/logging';
 import * as Meta from '../app/meta';
+import * as ConnectionFields from '../app/connection-fields';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
 
@@ -70,6 +72,12 @@ const manifest: Manifest = {
         plugin: Meta.plugin,
         routes: {
           prefix: '/api/meta'
+        }
+      },
+      {
+        plugin: ConnectionFields.plugin,
+        routes: {
+          prefix: '/api/connections-fields'
         }
       },
       {

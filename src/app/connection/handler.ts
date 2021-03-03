@@ -81,20 +81,6 @@ export const update = {
   }
 };
 
-export const getFields = {
-  description: 'Get Connection fields',
-  tags: ['api'],
-  response: {
-    status: {
-      200: Schema.getFieldsResponse
-    }
-  },
-  handler: async (_req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const fields = await Resource.getFields();
-    return { data: fields };
-  }
-};
-
 export const testConnection = {
   description: 'Test Connection',
   tags: ['api'],
