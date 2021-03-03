@@ -11,7 +11,7 @@ export const getCubesMetaData = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const connections = await Resource.cubesStats();
-    return { data: connections };
+    const stats = await Resource.cubesStats();
+    return { data: stats || {} };
   }
 };
