@@ -1,15 +1,10 @@
-import Hapi, { ServerInjectOptions, Plugin } from '@hapi/hapi';
-import * as ConnectionPlugin from 'src/app/connection';
+import Hapi, { ServerInjectOptions } from '@hapi/hapi';
+import { plugin } from 'src/app/connection';
 import * as Resource from 'src/app/connection/resource';
 import * as Factory from 'tests/factories';
 import * as Config from 'src/config/config';
 
 let server: Hapi.Server;
-
-interface IPlugin {
-  register: () => void | Promise<void>;
-  pkg: string;
-}
 
 interface IServerResponse extends Hapi.ServerInjectResponse {
   result: {
@@ -18,12 +13,14 @@ interface IServerResponse extends Hapi.ServerInjectResponse {
 }
 
 beforeAll(async () => {
-  const plugins: Plugin<IPlugin>[] = [<IPlugin>ConnectionPlugin];
+  const plugins = [{ plugin }];
   server = new Hapi.Server({
     port: Config.get('/port/api'),
     debug: false
   });
-  await server.register(plugins);
+  await server.register(plugins, {
+    routes: { prefix: '/api/connections' }
+  });
 });
 
 afterAll(async () => {
@@ -40,7 +37,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: '/connections'
+        url: '/api/connections'
       };
     });
     test('returns empty list if no connections in db', async () => {
@@ -88,7 +85,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/connections/${urn}`
+        url: `/api/connections/${urn}`
       };
     });
     test('return connection by urn', async () => {
@@ -131,7 +128,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'POST',
-        url: `/connections`
+        url: `/api/connections`
       };
     });
     test('should create connection', async () => {
@@ -200,7 +197,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'PUT',
-        url: `/connections/${urn}`
+        url: `/api/connections/${urn}`
       };
     });
     test('should update connection by urn', async () => {
@@ -281,7 +278,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/connections/${urn}/test`
+        url: `/api/connections/${urn}/test`
       };
     });
 
@@ -328,7 +325,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/connections/${urn}/tables`
+        url: `/api/connections/${urn}/tables`
       };
     });
 
@@ -380,7 +377,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/connections/${urn}/tables/${tableName}`
+        url: `/api/connections/${urn}/tables/${tableName}`
       };
     });
 
@@ -446,7 +443,7 @@ describe('Connection::Handler', () => {
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/connections/${urn}/tables/${tableName}/cube`
+        url: `/api/connections/${urn}/tables/${tableName}/cube`
       };
     });
 

@@ -8,6 +8,7 @@ import * as Config from './config';
 import Logging from '../plugins/logging';
 import * as Meta from '../app/meta';
 import * as ConnectionFields from '../app/connection-fields';
+import * as Connection from '../app/connection';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
@@ -57,9 +58,9 @@ const manifest: Manifest = {
         }
       },
       {
-        plugin: '../app/connection/index',
+        plugin: Connection.plugin,
         routes: {
-          prefix: '/api'
+          prefix: '/api/connections'
         }
       },
       {

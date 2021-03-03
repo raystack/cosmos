@@ -1,49 +1,49 @@
 import Hapi from '@hapi/hapi';
 import * as Handler from './handler';
 
-module.exports = {
+export const plugin = {
   name: 'connection',
   version: '1.0.0',
-  register(server: Hapi.Server) {
+  register: (server: Hapi.Server): void => {
     server.route([
       {
         method: 'GET',
-        path: '/connections',
+        path: '/',
         options: Handler.list
       },
       {
         method: 'POST',
-        path: '/connections',
+        path: '/',
         options: Handler.create
       },
       {
         method: 'GET',
-        path: '/connections/{urn}',
+        path: '/{urn}',
         options: Handler.get
       },
       {
         method: 'PUT',
-        path: '/connections/{urn}',
+        path: '/{urn}',
         options: Handler.update
       },
       {
         method: 'GET',
-        path: '/connections/{urn}/test',
+        path: '/{urn}/test',
         options: Handler.testConnection
       },
       {
         method: 'GET',
-        path: '/connections/{urn}/tables',
+        path: '/{urn}/tables',
         options: Handler.listTables
       },
       {
         method: 'GET',
-        path: '/connections/{urn}/tables/{table_name}',
+        path: '/{urn}/tables/{table_name}',
         options: Handler.getTable
       },
       {
         method: 'GET',
-        path: '/connections/{urn}/tables/{table_name}/cube',
+        path: '/{urn}/tables/{table_name}/cube',
         options: Handler.getTableCube
       }
     ]);
