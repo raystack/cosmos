@@ -6,7 +6,7 @@ import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
 import * as Config from './config';
 import Logging from '../plugins/logging';
-
+import * as Meta from '../app/meta';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
 
@@ -64,6 +64,12 @@ const manifest: Manifest = {
         plugin: '../app/cube/index',
         routes: {
           prefix: '/api'
+        }
+      },
+      {
+        plugin: Meta.plugin,
+        routes: {
+          prefix: '/api/meta'
         }
       },
       {

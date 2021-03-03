@@ -22,6 +22,11 @@ export interface IUpdateCubePayload {
   content?: string;
 }
 
+export interface ICubesStats {
+  total: number;
+  lastUpdatedAt: string;
+}
+
 export interface ICubeListQuery {
   connection?: string;
 }

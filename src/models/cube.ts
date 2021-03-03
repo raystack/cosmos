@@ -1,6 +1,11 @@
 import mongoose, { Schema, Model } from 'mongoose';
 
-import { IUpdateCubePayload, ICubeDocument, ICubeListQuery } from 'src/types';
+import {
+  IUpdateCubePayload,
+  ICubeDocument,
+  ICubeListQuery,
+  ICubesStats
+} from 'src/types';
 
 export interface ICubeModel extends Model<ICubeDocument> {
   list(query: ICubeListQuery): Promise<Array<ICubeDocument>>;
@@ -9,6 +14,7 @@ export interface ICubeModel extends Model<ICubeDocument> {
     urn: string,
     data: IUpdateCubePayload
   ): Promise<ICubeDocument | null>;
+  getStats(): Promise<ICubesStats[]>;
 }
 const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
   {
@@ -58,6 +64,19 @@ CubeSchema.statics.updateByUrn = function updateByUrn(urn, data) {
   )
     .lean()
     .exec();
+};
+
+CubeSchema.statics.getStats = function getStats() {
+  return this.aggregate([
+    {
+      $group: {
+        _id: null,
+        total: { $sum: 1 },
+        lastUpdatedAt: { $max: '$updatedAt' }
+      }
+    },
+    { $project: { _id: 0 } }
+  ]);
 };
 
 export default mongoose.model<ICubeDocument, ICubeModel>('Cube', CubeSchema);
