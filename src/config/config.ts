@@ -7,13 +7,6 @@ const criteria = {
 
 const config = {
   $meta: 'App configuration',
-  env: {
-    $filter: 'env',
-    production: 'production',
-    integration: 'integration',
-    test: 'test',
-    $default: 'dev'
-  },
   port: {
     api: {
       $env: 'PORT',
@@ -29,11 +22,6 @@ const config = {
   encryption_secrect_key: {
     $env: 'ENCRYPTION_SECRET_KEY',
     $default: 'test'
-  },
-  // Joi validation options
-  validationOptions: {
-    abortEarly: false, // abort after the last validation error
-    stripUnknown: true // remove unknown keys from the validated data
   }
 };
 
