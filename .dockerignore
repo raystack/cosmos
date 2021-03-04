@@ -11,3 +11,4 @@ tests
 .temp
 coverage
 package-lock.json
+cube-server
