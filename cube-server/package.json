@@ -11,5 +11,8 @@
     "@cubejs-backend/cubestore-driver": "^0.26.44",
     "@cubejs-backend/postgres-driver": "^0.26.38",
     "@cubejs-backend/server": "^0.26.44"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
   }
 }
