@@ -42,7 +42,7 @@ async function driverFactory(driverContext) {
   const { dataSource } = driverContext;
   const { data: connection } =
     dataSource !== 'default' ? await getConnection(dataSource) : {};
-  if (connection.type === 'postgres') {
+  if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
   return null;
