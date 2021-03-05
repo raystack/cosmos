@@ -13,6 +13,7 @@ services:
       - mongodb
     environment:
       MONGODB_HOST: mongodb://mongodb/cosmos
+      CUBE_URL: http://cube:4000
     healthcheck:
       test: ["CMD", "sh", "-c", "curl -f http://localhost:8000/ping"]
       interval: 20s
@@ -35,10 +36,32 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
+    depends_on:
+      - redis
+      - aggregate_db
     environment:
       COSMOS_URL: http://cosmos:8000
+      REDIS_URL: redis://redis:6379
+      CUBEJS_DEV_MODE: "true"
+      CUBEJS_EXT_DB_HOST: aggregate_db
+      CUBEJS_EXT_DB_NAME: cube-aggregate
+      CUBEJS_EXT_DB_USER: postgres
+      CUBEJS_EXT_DB_PASS: postgres
+      CUBEJS_EXT_DB_TYPE: postgres
     healthcheck:
       test: ["CMD", "sh", "-c", "curl -f http://localhost:4000/livez"]
       interval: 10s
       timeout: 5s
       retries: 12
+  redis:
+    image: "redis:alpine"
+  aggregate_db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=cube-aggregate
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5431:5432
+    volumes:
+      - ./.temp/aggregate_db:/var/lib/postgresql/data
