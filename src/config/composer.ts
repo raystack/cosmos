@@ -4,6 +4,8 @@ import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
+import H2o2 from '@hapi/h2o2';
+
 import * as Config from './config';
 import Logging from '../plugins/logging';
 import * as Meta from '../app/meta';
@@ -11,6 +13,7 @@ import * as ConnectionFields from '../app/connection-fields';
 import * as Connection from '../app/connection';
 import * as Cube from '../app/cube';
 import * as Health from '../app/health';
+import * as CubeProxy from '../app/cube-proxy';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
@@ -54,6 +57,9 @@ const manifest: Manifest = {
         options: Config.get('/mongoose')
       },
       {
+        plugin: H2o2
+      },
+      {
         plugin: Health.plugin,
         routes: {
           prefix: '/ping'
@@ -81,6 +87,13 @@ const manifest: Manifest = {
         plugin: ConnectionFields.plugin,
         routes: {
           prefix: '/api/connections-fields'
+        }
+      },
+      {
+        plugin: CubeProxy.plugin,
+        options: Config.get('/cube_server'),
+        routes: {
+          prefix: '/cube'
         }
       },
       {

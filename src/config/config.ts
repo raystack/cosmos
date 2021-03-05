@@ -19,6 +19,12 @@ const config = {
       $default: 'mongodb://localhost/enigma'
     }
   },
+  cube_server: {
+    url: {
+      $env: 'CUBE_URL',
+      $default: 'http://localhost:4000'
+    }
+  },
   encryption_secrect_key: {
     $env: 'ENCRYPTION_SECRET_KEY',
     $default: 'test'
