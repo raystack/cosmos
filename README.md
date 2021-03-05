@@ -17,7 +17,8 @@ Visit [http://localhost:8000/documentation](http://localhost:8000/documentation)
 ```bash
 PORT (optional, default: 8000)
 MONGODB_HOST (required)
-ENCRYPTION_SECRET_KEY (optional, default: "")
+ENCRYPTION_SECRET_KEY (default: "")
+CUBE_URL (default: "http://localhost:4000" )
 ```
 
 ## Building from source

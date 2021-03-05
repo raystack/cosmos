@@ -27,6 +27,7 @@
     "@types/faker": "^5.1.7",
     "@types/glob": "^7.1.3",
     "@types/hapi__glue": "^6.1.3",
+    "@types/hapi__h2o2": "^8.3.2",
     "@types/hapi__hapi": "^20.0.5",
     "@types/hapi__inert": "^5.2.2",
     "@types/hapi__vision": "^5.5.2",
@@ -65,6 +66,7 @@
     "@cubejs-backend/server-core": "0.26.25",
     "@hapi/boom": "^9.1.1",
     "@hapi/glue": "^8.0.0",
+    "@hapi/h2o2": "^9.0.2",
     "@hapi/hapi": "^20.1.0",
     "@hapi/hoek": "^9.1.1",
     "@hapi/inert": "^6.0.3",
@@ -88,7 +90,7 @@
   "jest": {
     "testMatch": [
       "**/(__tests__|tests)/**/*.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[jt]s?(x)"
+      "src/**/?(*.)+(spec|test).[jt]s?(x)"
     ],
     "preset": "ts-jest",
     "testEnvironment": "node",
