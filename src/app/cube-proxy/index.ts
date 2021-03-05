@@ -4,6 +4,11 @@ interface ICubeProxyOptions {
   url: string;
 }
 
+function modifyPath(pathname: string) {
+  const pathArr = pathname.split('/');
+  return pathArr.slice(2).join('/');
+}
+
 export const plugin = {
   name: 'cube-proxy',
   version: '1.0.0',
@@ -13,8 +18,13 @@ export const plugin = {
       path: '/{wildcard*}',
       handler: {
         proxy: {
-          passThrough: true,
-          uri: `${options.url}/{wildcard}`
+          mapUri: async (request) => {
+            const { pathname, search } = request.url;
+            return {
+              uri: `${options.url}/${modifyPath(pathname)}${search}`
+            };
+          },
+          passThrough: true
         }
       }
     });
