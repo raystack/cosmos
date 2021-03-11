@@ -84,5 +84,6 @@ export const getTableCube = async (
     transformedData.type,
     transformedData.credentials
   );
-  return provider.getTableCube(table, urn);
+  const dataSource = `${transformedData.type}::${urn}`;
+  return provider.getTableCube(table, dataSource);
 };
