@@ -39,7 +39,9 @@ const manifest: Manifest = {
     compression: false,
     routes: {
       security: true,
-      cors: true,
+      cors: {
+        additionalHeaders: ['x-request-id']
+      },
       timeout: {
         socket: false
       },
