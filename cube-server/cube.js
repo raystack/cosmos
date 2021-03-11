@@ -5,6 +5,7 @@
 // Cube.js configuration options: https://cube.dev/docs/config
 const fetch = require('node-fetch');
 const PostgresDriver = require('@cubejs-backend/postgres-driver');
+const BigQueryDrivery = require('@cubejs-backend/bigquery-driver');
 
 const ENIGMA_URL = process.env.ENIGMA_URL || 'http://localhost:8000';
 
@@ -45,6 +46,16 @@ async function driverFactory(driverContext) {
   if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
+  if (connection && connection.type === 'bigquery') {
+    const credentials = JSON.parse(
+      Buffer.from(connection.credentials.credentials, 'base64').toString('utf8')
+    );
+    return new BigQueryDrivery({
+      ...connection.credentials,
+      credentials,
+      ...defaultConfig
+    });
+  }
   return null;
 }
 
@@ -56,7 +67,7 @@ async function schemaVersion() {
 
 module.exports = {
   apiSecret: 'apiSecret', // It is just a placeholder, we dont use it
-  dbType: 'postgres', // TODO: need to call connection api to get
+  dbType: 'bigquery', // TODO: need to call connection api to get
   repositoryFactory: () => new EnigmaSchemaRepository(),
   checkAuth: (req, auth) => { },
   driverFactory,
