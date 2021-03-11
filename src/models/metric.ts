@@ -3,6 +3,7 @@ import { IMetricDocument } from 'src/types';
 
 export interface IMetricModel extends Model<IMetricDocument> {
   findByUrn(urn: string): Promise<IMetricDocument | null>;
+  list(): Promise<Array<IMetricDocument>>;
 }
 
 const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
@@ -45,6 +46,10 @@ const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
     versionKey: false
   }
 );
+
+MetricSchema.statics.list = function list(query = {}) {
+  return this.find(query, { _id: 0 }).lean().exec();
+};
 
 MetricSchema.statics.findByUrn = function findByUrn(urn) {
   return this.findOne({ urn }, { _id: 0 }).lean().exec();

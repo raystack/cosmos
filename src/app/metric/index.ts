@@ -7,6 +7,11 @@ export const plugin = {
   register: (server: Hapi.Server): void => {
     server.route([
       {
+        method: 'GET',
+        path: '/',
+        options: Handler.list
+      },
+      {
         method: 'POST',
         path: '/',
         options: Handler.create

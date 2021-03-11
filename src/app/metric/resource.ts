@@ -2,6 +2,10 @@ import Metric from 'src/models/metric';
 import { ICreateMetricPayload, IMetricDocument } from 'src/types';
 import * as Transformer from './transformer';
 
+export const list = async (): Promise<IMetricDocument[]> => {
+  return Metric.list();
+};
+
 export const create = async (
   payload: ICreateMetricPayload
 ): Promise<IMetricDocument> => {

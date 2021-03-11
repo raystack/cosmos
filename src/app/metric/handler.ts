@@ -4,6 +4,20 @@ import { ICreateMetricPayload } from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
 
+export const list = {
+  description: 'Get Metric list',
+  tags: ['api'],
+  response: {
+    status: {
+      200: Schema.listResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const metrics = await Resource.list();
+    return { data: metrics };
+  }
+};
+
 export const create = {
   description: 'Create Metric',
   tags: ['api'],
