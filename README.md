@@ -1,6 +1,7 @@
 # Enigma
 
 [![node-ci](https://github.com/odpf/enigma/actions/workflows/test.yml/badge.svg)](https://github.com/odpf/enigma/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/odpf/enigma/branch/main/graph/badge.svg?token=2CkqMa9YmH)](https://codecov.io/gh/odpf/enigma)
 
 ## Getting Started
 
