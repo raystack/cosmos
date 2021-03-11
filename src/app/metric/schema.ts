@@ -28,6 +28,10 @@ export const createResponse = Joi.object({
   data: metricResponse
 });
 
+export const listResponse = Joi.object({
+  data: Joi.array().items(metricResponse)
+});
+
 export const getParams = Joi.object({
   urn: Joi.string().required()
 });
