@@ -119,4 +119,49 @@ describe('Metric::Handler', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+  describe('list', () => {
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: '/api/metrics'
+      };
+    });
+
+    test('returns empty list if no metrics in db', async () => {
+      const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce([]);
+      const expectedResult = {
+        data: []
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns metrics list', async () => {
+      const metrics = Factory.Metric.data.buildList(2);
+      const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce(metrics);
+      const expectedResult = {
+        data: metrics
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns error when list fails', async () => {
+      const spy = jest
+        .spyOn(Resource, 'list')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
