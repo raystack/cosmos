@@ -390,15 +390,17 @@ describe('Connection::Resource', () => {
     test('should return the table cube schema', async () => {
       const urn = 'test-urn';
       const tableName = 'table1';
-      const connection = new Connection({ urn });
-
+      const dbType = 'biqquery';
+      const connection = new Connection({ urn, type: dbType });
       const connectionSpy = jest
         .spyOn(Connection, 'findByUrn')
         .mockResolvedValueOnce(connection);
       const transformerGetSpy = jest
         .spyOn(Transformer, 'get')
-        // @ts-ignore
-        .mockResolvedValueOnce({});
+        .mockResolvedValueOnce({
+          ...connection.toJSON(),
+          credentials: {}
+        });
 
       ConnectionProvider.prototype.getTableCube = jest
         .fn()
@@ -414,7 +416,7 @@ describe('Connection::Resource', () => {
       );
       expect(ConnectionProvider.prototype.getTableCube).toHaveBeenCalledWith(
         tableName,
-        urn
+        'biqquery::test-urn'
       );
     });
   });
