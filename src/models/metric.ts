@@ -1,7 +1,9 @@
 import mongoose, { Schema, Model } from 'mongoose';
 import { IMetricDocument } from 'src/types';
 
-export type IMetricModel = Model<IMetricDocument>;
+export interface IMetricModel extends Model<IMetricDocument> {
+  findByUrn(urn: string): Promise<IMetricDocument | null>;
+}
 
 const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
   {
@@ -43,6 +45,10 @@ const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
     versionKey: false
   }
 );
+
+MetricSchema.statics.findByUrn = function findByUrn(urn) {
+  return this.findOne({ urn }, { _id: 0 }).lean().exec();
+};
 
 export default mongoose.model<IMetricDocument, IMetricModel>(
   'Metric',
