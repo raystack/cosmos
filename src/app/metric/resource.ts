@@ -9,3 +9,7 @@ export const create = async (
   const metric = await Metric.create(data);
   return metric;
 };
+
+export const get = async (urn: string): Promise<IMetricDocument | null> => {
+  return Metric.findByUrn(urn);
+};

@@ -46,4 +46,24 @@ describe('Connection::Metric', () => {
       expect(connectionSpy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('get', () => {
+    test('should pass urn to findByUrn', async () => {
+      const metric = new Metric();
+      const urn = 'test-urn';
+      const spy = jest.spyOn(Metric, 'findByUrn').mockResolvedValueOnce(metric);
+      await Resource.get(urn);
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should return null if metric not found', async () => {
+      const urn = 'test-urn';
+      const spy = jest.spyOn(Metric, 'findByUrn').mockResolvedValueOnce(null);
+      const result = await Resource.get(urn);
+      expect(result).toBeNull();
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });
