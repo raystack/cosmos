@@ -18,8 +18,8 @@ export const create = async (
   payload: ICreateCubePayload
 ): Promise<ICubeDocument> => {
   const data = await Transformer.create(payload);
-  const connection = await Cube.create(data);
-  return connection;
+  const cube = await Cube.create(data);
+  return cube;
 };
 
 export const get = async (urn: string): Promise<ICubeDocument | null> => {

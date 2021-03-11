@@ -16,6 +16,18 @@ export interface ICreateCubePayload {
   content: string;
 }
 
+export interface ICreateMetricPayload {
+  name: string;
+  abbreviation: string;
+  description?: string;
+  labels?: Map<string, string>;
+  fields: {
+    measures: string[];
+    dimensions: string[];
+    filters: unknown[];
+  };
+}
+
 export interface IUpdateCubePayload {
   connection?: string;
   tableName?: string;
@@ -98,3 +110,15 @@ export interface ITableListItem {
   name: string;
   id: string;
 }
+
+export interface IMetric extends ICreateMetricPayload {
+  urn: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICreateMetricTransformedPayload extends ICreateMetricPayload {
+  urn: string;
+}
+
+export type IMetricDocument = IMetric & Document;
