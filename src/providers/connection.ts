@@ -114,14 +114,17 @@ export default class ConnectionProvider {
     }
   }
 
-  public async getTableCube(tableName: string, urn: string): Promise<string> {
+  public async getTableCube(
+    tableName: string,
+    dataSource: string
+  ): Promise<string> {
     const schemas = await this.driver.tablesSchema();
     const template = new ScaffoldingTemplate(schemas, this.driver);
     const scaffoldingSchema = new ScaffoldingSchema(schemas);
     scaffoldingSchema.prepareTableNamesToTables([tableName]);
     const tableSchema = scaffoldingSchema.tableSchema(tableName, true);
     return template.renderFile(
-      template.schemaDescriptorForTable(tableSchema, { dataSource: urn })
+      template.schemaDescriptorForTable(tableSchema, { dataSource })
     );
   }
 }
