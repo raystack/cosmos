@@ -41,8 +41,9 @@ async function getCubesMetaData() {
 async function driverFactory(driverContext) {
   const defaultConfig = { readOnly: true };
   const { dataSource } = driverContext;
+  const [type, urn] = dataSource.split('::');
   const { data: connection } =
-    dataSource !== 'default' ? await getConnection(dataSource) : {};
+    dataSource !== 'default' ? await getConnection(urn) : {};
   if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
@@ -59,6 +60,13 @@ async function driverFactory(driverContext) {
   return null;
 }
 
+function dbType(ctx) {
+  const { dataSource } = ctx;
+  if (dataSource === 'default') return 'bigquery';
+  const [type] = dataSource.split('::');
+  return type;
+}
+
 async function schemaVersion() {
   const { data } = await getCubesMetaData();
   const { total, lastUpdatedAt } = data;
@@ -67,9 +75,9 @@ async function schemaVersion() {
 
 module.exports = {
   apiSecret: 'apiSecret', // It is just a placeholder, we dont use it
-  dbType: 'bigquery', // TODO: need to call connection api to get
   repositoryFactory: () => new CosmosSchemaRepository(),
   checkAuth: (req, auth) => { },
+  dbType,
   driverFactory,
   schemaVersion
 };
