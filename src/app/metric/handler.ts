@@ -16,7 +16,6 @@ export const create = {
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const metric = await Resource.create(<ICreateMetricPayload>req.payload);
-    console.log(metric);
     return { data: metric };
   }
 };
