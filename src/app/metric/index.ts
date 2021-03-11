@@ -10,6 +10,11 @@ export const plugin = {
         method: 'POST',
         path: '/',
         options: Handler.create
+      },
+      {
+        method: 'GET',
+        path: '/{urn}',
+        options: Handler.get
       }
     ]);
   }

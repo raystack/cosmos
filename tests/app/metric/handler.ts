@@ -77,4 +77,46 @@ describe('Metric::Handler', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+  describe('get', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'GET',
+        url: `/api/metrics/${urn}`
+      };
+    });
+    test('return metric by urn', async () => {
+      const metric = Factory.Metric.data.build({ urn });
+      const spy = jest.spyOn(Resource, 'get').mockResolvedValueOnce(metric);
+      const expectedResult = {
+        data: metric
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 404 when metric not found', async () => {
+      const spy = jest.spyOn(Resource, 'get').mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when get call throws error', async () => {
+      const spy = jest
+        .spyOn(Resource, 'get')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

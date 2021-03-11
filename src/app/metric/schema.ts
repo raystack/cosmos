@@ -27,3 +27,7 @@ const metricResponse = Joi.object({
 export const createResponse = Joi.object({
   data: metricResponse
 });
+
+export const getParams = Joi.object({
+  urn: Joi.string().required()
+});
