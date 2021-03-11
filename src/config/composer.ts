@@ -14,6 +14,7 @@ import * as Connection from '../app/connection';
 import * as Cube from '../app/cube';
 import * as Health from '../app/health';
 import * as CubeProxy from '../app/cube-proxy';
+import * as Metric from '../app/metric';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const Package = require('../../package.json');
@@ -89,6 +90,12 @@ const manifest: Manifest = {
         plugin: ConnectionFields.plugin,
         routes: {
           prefix: '/api/connections-fields'
+        }
+      },
+      {
+        plugin: Metric.plugin,
+        routes: {
+          prefix: '/api/metrics'
         }
       },
       {
