@@ -1,19 +1,5 @@
-import mongoose, { Schema, Model, Document } from 'mongoose';
-
-export interface IMetric {
-  urn: string;
-  name: string;
-  abbreviation: string;
-  description?: string;
-  labels: Map<string, string>;
-  fields: {
-    measures: string[];
-    dimensions: string[];
-    filters: unknown[];
-  };
-}
-
-export type IMetricDocument = IMetric & Document;
+import mongoose, { Schema, Model } from 'mongoose';
+import { IMetricDocument } from 'src/types';
 
 export type IMetricModel = Model<IMetricDocument>;
 
