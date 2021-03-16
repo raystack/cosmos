@@ -104,4 +104,52 @@ describe('Connection::Metric', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update', () => {
+    test('should return null if metric not found', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        abbreviation: 'TST',
+        meta: {
+          foo: 'bar'
+        },
+        fields: {
+          measures: [],
+          dimensions: [],
+          filters: []
+        }
+      };
+      const spy = jest.spyOn(Metric, 'updateByUrn').mockResolvedValueOnce(null);
+
+      const result = await Resource.update(urn, data);
+      expect(result).toBeNull();
+      expect(spy).toHaveBeenCalledWith(urn, data);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should update the metric', async () => {
+      const urn = 'test-urn';
+      const data = {
+        name: 'test',
+        abbreviation: 'TST',
+        meta: {
+          foo: 'bar'
+        },
+        fields: {
+          measures: [],
+          dimensions: [],
+          filters: []
+        }
+      };
+      const metric = new Metric({ ...data, urn });
+      const spy = jest
+        .spyOn(Metric, 'updateByUrn')
+        .mockResolvedValueOnce(metric);
+      const result = await Resource.update(urn, data);
+      expect(result?.urn).toBe(urn);
+      expect(spy).toHaveBeenCalledWith(urn, data);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

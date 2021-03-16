@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import { ICreateMetricPayload } from 'src/types';
+import { ICreateMetricPayload, IUpdateMetricPayload } from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
 
@@ -51,6 +51,30 @@ export const get = {
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
     const metric = await Resource.get(req.params.urn);
+    if (!metric) {
+      throw Boom.notFound(`Metric not found for urn: ${req.params.urn}`);
+    }
+    return { data: metric };
+  }
+};
+
+export const update = {
+  description: 'Update Connection by urn',
+  tags: ['api'],
+  validate: {
+    payload: Schema.updatePayload,
+    params: Schema.getParams
+  },
+  response: {
+    status: {
+      200: Schema.createResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const metric = await Resource.update(
+      req.params.urn,
+      <IUpdateMetricPayload>req.payload
+    );
     if (!metric) {
       throw Boom.notFound(`Metric not found for urn: ${req.params.urn}`);
     }

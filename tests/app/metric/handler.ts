@@ -181,4 +181,65 @@ describe('Metric::Handler', () => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('update', () => {
+    const urn = 'test-urn';
+    let request: ServerInjectOptions;
+    beforeEach(() => {
+      request = {
+        method: 'PUT',
+        url: `/api/metrics/${urn}`
+      };
+    });
+
+    test('update metric by urn', async () => {
+      const payload = Factory.Metric.payload.build();
+      request.payload = payload;
+      const metric = Factory.Metric.data.build({ urn, ...payload });
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(metric);
+      const expectedResult = {
+        data: metric
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 404 when metric not found', async () => {
+      const payload = Factory.Metric.payload.build();
+      request.payload = payload;
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(null);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(404);
+      expect(response.result.error).toBe('Not Found');
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 500 when update call throws error', async () => {
+      const payload = Factory.Metric.payload.build();
+      request.payload = payload;
+      const spy = jest
+        .spyOn(Resource, 'update')
+        .mockRejectedValueOnce(new Error());
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(500);
+      expect(response.result.error).toBe('Internal Server Error');
+      expect(spy).toHaveBeenCalledWith(urn, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('returns 400 if payload is not valid', async () => {
+      const payload = Factory.Metric.payload.build({ meta: [1234] });
+      const metric = Factory.Metric.data.build({ urn, ...payload });
+      request.payload = payload;
+      const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(metric);
+      const response = <IServerResponse>await server.inject(request);
+      expect(response.statusCode).toBe(400);
+      expect(response.result.error).toBe('Bad Request');
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+  });
 });

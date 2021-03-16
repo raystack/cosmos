@@ -1,5 +1,9 @@
 import Metric from 'src/models/metric';
-import { ICreateMetricPayload, IMetricDocument } from 'src/types';
+import {
+  ICreateMetricPayload,
+  IMetricDocument,
+  IUpdateMetricPayload
+} from 'src/types';
 import * as Transformer from './transformer';
 
 export const list = async (
@@ -18,4 +22,11 @@ export const create = async (
 
 export const get = async (urn: string): Promise<IMetricDocument | null> => {
   return Metric.findByUrn(urn);
+};
+
+export const update = async (
+  urn: string,
+  payload: IUpdateMetricPayload
+): Promise<IMetricDocument | null> => {
+  return Metric.updateByUrn(urn, payload);
 };

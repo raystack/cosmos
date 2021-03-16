@@ -20,8 +20,8 @@ export const list = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const connections = await Resource.list(<ICubeListQuery>req.query);
-    return { data: connections };
+    const cubes = await Resource.list(<ICubeListQuery>req.query);
+    return { data: cubes };
   }
 };
 
@@ -63,7 +63,7 @@ export const get = {
 };
 
 export const update = {
-  description: 'Update Connection by urn',
+  description: 'Update Cube by urn',
   tags: ['api'],
   validate: {
     payload: Schema.updatePayload,
@@ -75,13 +75,13 @@ export const update = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const connection = await Resource.update(
+    const cube = await Resource.update(
       req.params.urn,
       <IUpdateCubePayload>req.payload
     );
-    if (!connection) {
-      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    if (!cube) {
+      throw Boom.notFound(`Cube not found for urn: ${req.params.urn}`);
     }
-    return { data: connection };
+    return { data: cube };
   }
 };

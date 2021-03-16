@@ -28,6 +28,18 @@ export interface ICreateMetricPayload {
   };
 }
 
+export interface IUpdateMetricPayload {
+  name?: string;
+  abbreviation?: string;
+  description?: string;
+  meta?: Record<string, string>;
+  fields?: {
+    measures?: string[];
+    dimensions?: string[];
+    filters?: unknown[];
+  };
+}
+
 export interface IUpdateCubePayload {
   connection?: string;
   tableName?: string;
