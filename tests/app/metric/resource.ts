@@ -14,6 +14,9 @@ describe('Connection::Metric', () => {
       const data: ICreateMetricPayload = {
         name: 'test',
         abbreviation: 'TST',
+        meta: {
+          foo: 'bar'
+        },
         fields: {
           measures: [],
           dimensions: [],
