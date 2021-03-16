@@ -3,6 +3,7 @@ import { plugin } from 'src/app/metric';
 import * as Resource from 'src/app/metric/resource';
 import * as Factory from 'tests/factories';
 import * as Config from 'src/config/config';
+import Qs from 'qs';
 
 let server: Hapi.Server;
 
@@ -16,6 +17,9 @@ beforeAll(async () => {
   const plugins = [{ plugin }];
   server = new Hapi.Server({
     port: Config.get('/port/api'),
+    query: {
+      parser: (query) => Qs.parse(query, { comma: true, allowDots: true })
+    },
     debug: false
   });
   await server.register(plugins, { routes: { prefix: '/api/metrics' } });
@@ -136,7 +140,7 @@ describe('Metric::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -149,7 +153,7 @@ describe('Metric::Handler', () => {
       const response = await server.inject(request);
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -160,7 +164,20 @@ describe('Metric::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(500);
       expect(response.result.error).toBe('Internal Server Error');
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should pass the filters', async () => {
+      request.url = '/api/metrics?meta.foo=bar&meta.foo1=bar1';
+      const spy = jest.spyOn(Resource, 'list').mockResolvedValueOnce([]);
+      const expectedResult = {
+        data: []
+      };
+      const response = await server.inject(request);
+      expect(response.statusCode).toBe(200);
+      expect(response.result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith({ meta: { foo: 'bar', foo1: 'bar1' } });
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

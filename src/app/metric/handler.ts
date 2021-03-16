@@ -7,13 +7,16 @@ import * as Schema from './schema';
 export const list = {
   description: 'Get Metric list',
   tags: ['api'],
+  validate: {
+    query: Schema.listQuery
+  },
   response: {
     status: {
       200: Schema.listResponse
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const metrics = await Resource.list();
+    const metrics = await Resource.list(req.query);
     return { data: metrics };
   }
 };

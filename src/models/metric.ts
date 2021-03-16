@@ -3,7 +3,9 @@ import { IMetricDocument } from 'src/types';
 
 export interface IMetricModel extends Model<IMetricDocument> {
   findByUrn(urn: string): Promise<IMetricDocument | null>;
-  list(): Promise<Array<IMetricDocument>>;
+  list(query: {
+    meta?: Record<string, string>;
+  }): Promise<Array<IMetricDocument>>;
 }
 
 const MetricSchema = new Schema<IMetricDocument, IMetricModel>(

@@ -76,7 +76,7 @@ describe('Connection::Metric', () => {
       const expectedResult: IMetricDocument[] = [];
       const result = await Resource.list();
       expect(result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -86,7 +86,21 @@ describe('Connection::Metric', () => {
       const expectedResult: IMetricDocument[] = metrics;
       const result = await Resource.list();
       expect(result).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(/* empty */);
+      expect(spy).toHaveBeenCalledWith({});
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should filter list based on meta', async () => {
+      const query = { meta: { foo: 'bar', foo1: 'bar1' } };
+      const metrics = [
+        new Metric({ urn: 1, meta: { foo: 'bar', foo1: 'bar1' } }),
+        new Metric({ urn: 2, meta: { foo: 'bar', foo1: 'bar1' } })
+      ];
+      const spy = jest.spyOn(Metric, 'list').mockResolvedValueOnce(metrics);
+      const expectedResult: IMetricDocument[] = metrics;
+      const result = await Resource.list(query);
+      expect(result).toEqual(expectedResult);
+      expect(spy).toHaveBeenCalledWith(query);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
