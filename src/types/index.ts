@@ -20,7 +20,7 @@ export interface ICreateMetricPayload {
   name: string;
   abbreviation: string;
   description?: string;
-  labels?: Map<string, string>;
+  meta?: Record<string, string>;
   fields: {
     measures: string[];
     dimensions: string[];

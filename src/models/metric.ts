@@ -21,14 +21,13 @@ const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
     abbreviation: {
       type: String,
       trim: true,
-      unique: true,
       required: 'abbreviation is required'
     },
     description: {
       type: String,
       trim: true
     },
-    labels: {
+    meta: {
       type: Map,
       of: String
     },

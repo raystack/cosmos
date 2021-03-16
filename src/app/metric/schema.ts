@@ -5,7 +5,7 @@ export const createPayload = Joi.object()
     name: Joi.string().required(),
     abbreviation: Joi.string().required(),
     description: Joi.string(),
-    labels: Joi.object().pattern(Joi.string(), Joi.string()),
+    meta: Joi.object().pattern(Joi.string(), Joi.string()),
     fields: Joi.object({
       measures: Joi.array().items(Joi.string()),
       dimensions: Joi.array().items(Joi.string()),
