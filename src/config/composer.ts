@@ -1,4 +1,5 @@
 import Glue, { Manifest } from '@hapi/glue';
+import Qs from 'qs';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
@@ -33,6 +34,9 @@ const swaggerOptions = {
 const manifest: Manifest = {
   server: {
     port: Config.get('/port/api'),
+    query: {
+      parser: (query) => Qs.parse(query, { comma: true, allowDots: true })
+    },
     router: {
       stripTrailingSlash: true,
       isCaseSensitive: false
