@@ -20,6 +20,11 @@ export const plugin = {
         method: 'GET',
         path: '/{urn}',
         options: Handler.get
+      },
+      {
+        method: 'PUT',
+        path: '/{urn}',
+        options: Handler.update
       }
     ]);
   }
