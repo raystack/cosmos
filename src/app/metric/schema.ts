@@ -35,3 +35,7 @@ export const listResponse = Joi.object({
 export const getParams = Joi.object({
   urn: Joi.string().required()
 });
+
+export const listQuery = Joi.object({
+  meta: Joi.object().pattern(Joi.string(), Joi.string())
+});
