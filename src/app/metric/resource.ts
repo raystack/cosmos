@@ -1,7 +1,6 @@
 import Metric from 'src/models/metric';
 import {
   ICreateMetricPayload,
-  IMetricResponse,
   IMetricDocument,
   IUpdateMetricPayload
 } from 'src/types';
@@ -21,9 +20,8 @@ export const create = async (
   return metric;
 };
 
-export const get = async (urn: string): Promise<IMetricResponse | null> => {
-  const metric = await Metric.findByUrn(urn);
-  return metric && Transformer.get(metric);
+export const get = async (urn: string): Promise<IMetricDocument | null> => {
+  return Metric.findByUrn(urn);
 };
 
 export const update = async (

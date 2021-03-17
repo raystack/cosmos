@@ -16,18 +16,16 @@ export interface ICreateCubePayload {
   content: string;
 }
 
-export interface IMetricFields {
-  measures: string[];
-  dimensions: string[];
-  filters: unknown[];
-}
-
 export interface ICreateMetricPayload {
   name: string;
   abbreviation: string;
   description?: string;
   meta?: Record<string, string>;
-  fields: IMetricFields;
+  fields: {
+    measures: string[];
+    dimensions: string[];
+    filters: unknown[];
+  };
 }
 
 export interface IUpdateMetricPayload {
@@ -35,7 +33,11 @@ export interface IUpdateMetricPayload {
   abbreviation?: string;
   description?: string;
   meta?: Record<string, string>;
-  fields?: IMetricFields;
+  fields?: {
+    measures?: string[];
+    dimensions?: string[];
+    filters?: unknown[];
+  };
 }
 
 export interface IUpdateCubePayload {
@@ -132,7 +134,3 @@ export interface ICreateMetricTransformedPayload extends ICreateMetricPayload {
 }
 
 export type IMetricDocument = IMetric & Document;
-
-export interface IMetricResponse extends IMetric {
-  sql: string;
-}
