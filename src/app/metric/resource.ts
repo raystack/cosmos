@@ -16,8 +16,7 @@ export const create = async (
   payload: ICreateMetricPayload
 ): Promise<IMetricDocument> => {
   const data = await Transformer.create(payload);
-  const metric = await Metric.create(data);
-  return metric;
+  return Metric.create(data);
 };
 
 export const get = async (urn: string): Promise<IMetricDocument | null> => {
