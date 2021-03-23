@@ -5,7 +5,8 @@
 // Cube.js configuration options: https://cube.dev/docs/config
 const fetch = require('node-fetch');
 const PostgresDriver = require('@cubejs-backend/postgres-driver');
-const BigQueryDrivery = require('@cubejs-backend/bigquery-driver');
+const BigQueryDriver = require('@cubejs-backend/bigquery-driver');
+const MysqlDriver = require('@cubejs-backend/mysql-driver');
 
 const ENIGMA_URL = process.env.ENIGMA_URL || 'http://localhost:8000';
 
@@ -47,11 +48,14 @@ async function driverFactory(driverContext) {
   if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
+  if (connection && connection.type === 'mysql') {
+    return new MysqlDriver({ ...connection.credentials, ...defaultConfig });
+  }
   if (connection && connection.type === 'bigquery') {
     const credentials = JSON.parse(
       Buffer.from(connection.credentials.credentials, 'base64').toString('utf8')
     );
-    return new BigQueryDrivery({
+    return new BigQueryDriver({
       ...connection.credentials,
       credentials,
       ...defaultConfig

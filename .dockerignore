@@ -12,3 +12,5 @@ tests
 coverage
 package-lock.json
 cube-server
+.dockerignore
+Dockerfile

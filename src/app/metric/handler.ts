@@ -1,15 +1,11 @@
 import Hapi from '@hapi/hapi';
 import Boom from '@hapi/boom';
-import {
-  ICreateCubePayload,
-  ICubeListQuery,
-  IUpdateCubePayload
-} from 'src/types';
+import { ICreateMetricPayload, IUpdateMetricPayload } from 'src/types';
 import * as Resource from './resource';
 import * as Schema from './schema';
 
 export const list = {
-  description: 'List Cubes',
+  description: 'Get Metric list',
   tags: ['api'],
   validate: {
     query: Schema.listQuery
@@ -20,13 +16,13 @@ export const list = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const cubes = await Resource.list(<ICubeListQuery>req.query);
-    return { data: cubes };
+    const metrics = await Resource.list(req.query);
+    return { data: metrics };
   }
 };
 
 export const create = {
-  description: 'Create Cube',
+  description: 'Create Metric',
   tags: ['api'],
   validate: {
     payload: Schema.createPayload
@@ -37,13 +33,13 @@ export const create = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const cube = await Resource.create(<ICreateCubePayload>req.payload);
-    return { data: cube };
+    const metric = await Resource.create(<ICreateMetricPayload>req.payload);
+    return { data: metric };
   }
 };
 
 export const get = {
-  description: 'Get Cube by urn',
+  description: 'Get Metric by urn',
   tags: ['api'],
   validate: {
     params: Schema.getParams
@@ -54,16 +50,16 @@ export const get = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const cube = await Resource.get(req.params.urn);
-    if (!cube) {
-      throw Boom.notFound(`Cube not found for urn: ${req.params.urn}`);
+    const metric = await Resource.get(req.params.urn);
+    if (!metric) {
+      throw Boom.notFound(`Metric not found for urn: ${req.params.urn}`);
     }
-    return { data: cube };
+    return { data: metric };
   }
 };
 
 export const update = {
-  description: 'Update Cube by urn',
+  description: 'Update Connection by urn',
   tags: ['api'],
   validate: {
     payload: Schema.updatePayload,
@@ -75,13 +71,13 @@ export const update = {
     }
   },
   handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
-    const cube = await Resource.update(
+    const metric = await Resource.update(
       req.params.urn,
-      <IUpdateCubePayload>req.payload
+      <IUpdateMetricPayload>req.payload
     );
-    if (!cube) {
-      throw Boom.notFound(`Cube not found for urn: ${req.params.urn}`);
+    if (!metric) {
+      throw Boom.notFound(`Metric not found for urn: ${req.params.urn}`);
     }
-    return { data: cube };
+    return { data: metric };
   }
 };

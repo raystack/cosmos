@@ -1,4 +1,3 @@
-import * as Connection from './connection';
-import * as Cube from './cube';
-
-export { Connection, Cube };
+export * as Connection from './connection';
+export * as Cube from './cube';
+export * as Metric from './metric';
