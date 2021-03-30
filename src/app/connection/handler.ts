@@ -101,6 +101,25 @@ export const testConnection = {
   }
 };
 
+export const testCredentials = {
+  description: 'Test Credentials',
+  tags: ['api'],
+  validate: {
+    payload: Schema.createPayload
+  },
+  response: {
+    status: {
+      200: Schema.testResponse
+    }
+  },
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.testCredentials(
+      <ICreateConnectionPayload>req.payload
+    );
+    return { data };
+  }
+};
+
 export const listTables = {
   description: "Get Connection's tables list",
   tags: ['api'],

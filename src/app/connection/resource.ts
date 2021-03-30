@@ -46,6 +46,14 @@ export const testConnection = async (urn: string): Promise<string | null> => {
   return provider.test();
 };
 
+export const testCredentials = async (
+  payload: ICreateConnectionPayload
+): Promise<string | null> => {
+  const { type, credentials } = payload;
+  const provider = new ConnectionProvider(type, credentials);
+  return provider.test();
+};
+
 export const listTables = async (
   urn: string
 ): Promise<ITableListItem[] | null> => {

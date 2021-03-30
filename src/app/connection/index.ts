@@ -17,6 +17,11 @@ export const plugin = {
         options: Handler.create
       },
       {
+        method: 'POST',
+        path: '/test',
+        options: Handler.testCredentials
+      },
+      {
         method: 'GET',
         path: '/{urn}',
         options: Handler.get
