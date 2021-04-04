@@ -132,7 +132,7 @@ describe('ConnectionProvider', () => {
 
   describe('getTablesDetails', () => {
     test('should throw error is table name is not in correct format', async () => {
-      const tableName = 'table1';
+      const tableId = 'table1';
       const mockTableSchema = jest.fn().mockResolvedValueOnce({
         schema1: { table1: [], table2: [] },
         schema2: { table1: [], table2: [] }
@@ -148,7 +148,7 @@ describe('ConnectionProvider', () => {
         )
         .mockReturnValueOnce(testDriver);
       const provider = new ConnectionProvider('bigquery', {});
-      await expect(provider.getTablesDetails(tableName)).rejects.toThrow(
+      await expect(provider.getTablesDetails(tableId)).rejects.toThrow(
         new Error(
           `Incorrect format for 'table1'. Should be in '<schema>.<table>' format`
         )
@@ -161,7 +161,7 @@ describe('ConnectionProvider', () => {
     });
 
     test('should return table schema', async () => {
-      const tableName = 'schema1.table1';
+      const tableId = 'schema1.table1';
       const mockTableSchema = jest.fn().mockResolvedValueOnce({
         schema1: {
           table1: [
@@ -191,7 +191,7 @@ describe('ConnectionProvider', () => {
         )
         .mockReturnValueOnce(testDriver);
       const provider = new ConnectionProvider('bigquery', {});
-      const result = await provider.getTablesDetails(tableName);
+      const result = await provider.getTablesDetails(tableId);
       expect(result).toEqual([
         { mode: 'NULLABLE', name: 'order_no', type: 'STRING' },
         { mode: 'NULLABLE', name: 'booking_time', type: 'TIMESTAMP' }
@@ -205,7 +205,7 @@ describe('ConnectionProvider', () => {
     });
 
     test('should return table schema for postgres', async () => {
-      const tableName = 'schema1.table1';
+      const tableId = 'schema1.table1';
       const mockQuery = jest.fn().mockResolvedValueOnce([
         {
           table_catalog: 'schema1',
@@ -243,7 +243,7 @@ describe('ConnectionProvider', () => {
         )
         .mockReturnValueOnce(testDriver);
       const provider = new ConnectionProvider('postgres', {});
-      const result = await provider.getTablesDetails(tableName);
+      const result = await provider.getTablesDetails(tableId);
       expect(result).toEqual([
         {
           table_catalog: 'schema1',

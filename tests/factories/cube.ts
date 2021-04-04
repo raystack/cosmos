@@ -5,7 +5,7 @@ export const data = new Factory()
   .sequence('urn', () => faker.random.uuid())
   .attrs({
     connection: faker.random.uuid(),
-    tableName: faker.lorem.word(),
+    tableId: faker.lorem.word(),
     content: faker.lorem.paragraph(),
     createdAt: () => new Date(),
     updatedAt: () => new Date()
@@ -13,6 +13,6 @@ export const data = new Factory()
 
 export const payload = new Factory().attrs({
   connection: faker.random.uuid(),
-  tableName: faker.lorem.word(),
+  tableId: faker.lorem.word(),
   content: faker.lorem.paragraph()
 });

@@ -372,12 +372,12 @@ describe('Connection::Handler', () => {
 
   describe('getTable', () => {
     const urn = 'test-urn';
-    const tableName = 'table1';
+    const tableId = 'table1';
     let request: ServerInjectOptions;
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/api/connections/${urn}/tables/${tableName}`
+        url: `/api/connections/${urn}/tables/${tableId}`
       };
     });
 
@@ -386,7 +386,7 @@ describe('Connection::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(404);
       expect(response.result.error).toBe('Not Found');
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -397,7 +397,7 @@ describe('Connection::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(500);
       expect(response.result.error).toBe('Internal Server Error');
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -432,18 +432,18 @@ describe('Connection::Handler', () => {
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
     });
   });
 
   describe('getTableCube', () => {
     const urn = 'test-urn';
-    const tableName = 'table1';
+    const tableId = 'table1';
     let request: ServerInjectOptions;
     beforeEach(() => {
       request = {
         method: 'GET',
-        url: `/api/connections/${urn}/tables/${tableName}/cube`
+        url: `/api/connections/${urn}/tables/${tableId}/cube`
       };
     });
 
@@ -454,7 +454,7 @@ describe('Connection::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(404);
       expect(response.result.error).toBe('Not Found');
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -465,7 +465,7 @@ describe('Connection::Handler', () => {
       const response = <IServerResponse>await server.inject(request);
       expect(response.statusCode).toBe(500);
       expect(response.result.error).toBe('Internal Server Error');
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
@@ -480,7 +480,7 @@ describe('Connection::Handler', () => {
       expect(response.statusCode).toBe(200);
       expect(response.result).toEqual(expectedResult);
       expect(spy).toHaveBeenCalledTimes(1);
-      expect(spy).toHaveBeenCalledWith(urn, tableName);
+      expect(spy).toHaveBeenCalledWith(urn, tableId);
     });
   });
 });

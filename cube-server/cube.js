@@ -14,7 +14,7 @@ class EnigmaSchemaRepository {
   async dataSchemaFiles() {
     const cubes = await this.getCubes();
     return cubes.map((cube) => ({
-      fileName: cube.tableName,
+      fileName: cube.tableId,
       content: cube.content
     }));
   }

@@ -12,7 +12,7 @@ export interface ICreateConnectionPayload {
 
 export interface ICreateCubePayload {
   connection: string;
-  tableName: string;
+  tableId: string;
   content: string;
 }
 
@@ -42,7 +42,7 @@ export interface IUpdateMetricPayload {
 
 export interface IUpdateCubePayload {
   connection?: string;
-  tableName?: string;
+  tableId?: string;
   content?: string;
 }
 
@@ -72,7 +72,7 @@ export type IConnectionDocument = IConnection & Document;
 export interface ICube {
   urn: string;
   connection: string;
-  tableName: string;
+  tableId: string;
   content: string;
   createdAt: string;
   updatedAt: string;

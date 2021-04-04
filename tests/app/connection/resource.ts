@@ -295,7 +295,7 @@ describe('Connection::Resource', () => {
   describe('getTable', () => {
     test('should return null if connection not found', async () => {
       const urn = 'test-urn';
-      const tableName = 'table1';
+      const tableId = 'table1';
       const connectionSpy = jest
         .spyOn(Connection, 'findByUrn')
         .mockResolvedValueOnce(null);
@@ -304,7 +304,7 @@ describe('Connection::Resource', () => {
         // @ts-ignore
         .mockResolvedValueOnce({});
 
-      const result = await Resource.getTable(urn, tableName);
+      const result = await Resource.getTable(urn, tableId);
       expect(result).toBeNull();
 
       expect(connectionSpy).toHaveBeenCalledWith(urn);
@@ -315,7 +315,7 @@ describe('Connection::Resource', () => {
 
     test('should return the table details', async () => {
       const urn = 'test-urn';
-      const tableName = 'table1';
+      const tableId = 'table1';
       const connection = new Connection({ urn });
 
       const connectionSpy = jest
@@ -341,7 +341,7 @@ describe('Connection::Resource', () => {
           }
         ]);
 
-      const result = await Resource.getTable(urn, tableName);
+      const result = await Resource.getTable(urn, tableId);
       expect(result).toEqual([
         {
           name: 'order_no',
@@ -362,14 +362,14 @@ describe('Connection::Resource', () => {
       ).toHaveBeenCalledTimes(1);
       expect(
         ConnectionProvider.prototype.getTablesDetails
-      ).toHaveBeenCalledWith(tableName);
+      ).toHaveBeenCalledWith(tableId);
     });
   });
 
   describe('getTableCube', () => {
     test('should return null if connection not found', async () => {
       const urn = 'test-urn';
-      const tableName = 'table1';
+      const tableId = 'table1';
       const connectionSpy = jest
         .spyOn(Connection, 'findByUrn')
         .mockResolvedValueOnce(null);
@@ -378,7 +378,7 @@ describe('Connection::Resource', () => {
         // @ts-ignore
         .mockResolvedValueOnce({});
 
-      const result = await Resource.getTable(urn, tableName);
+      const result = await Resource.getTable(urn, tableId);
       expect(result).toBeNull();
 
       expect(connectionSpy).toHaveBeenCalledWith(urn);
@@ -389,7 +389,7 @@ describe('Connection::Resource', () => {
 
     test('should return the table cube schema', async () => {
       const urn = 'test-urn';
-      const tableName = 'table1';
+      const tableId = 'table1';
       const dbType = 'biqquery';
       const connection = new Connection({ urn, type: dbType });
       const connectionSpy = jest
@@ -406,7 +406,7 @@ describe('Connection::Resource', () => {
         .fn()
         .mockResolvedValueOnce('table cube schema');
 
-      const result = await Resource.getTableCube(urn, tableName);
+      const result = await Resource.getTableCube(urn, tableId);
       expect(result).toBe('table cube schema');
       expect(connectionSpy).toHaveBeenCalledWith(urn);
       expect(connectionSpy).toHaveBeenCalledTimes(1);
@@ -415,7 +415,7 @@ describe('Connection::Resource', () => {
         1
       );
       expect(ConnectionProvider.prototype.getTableCube).toHaveBeenCalledWith(
-        tableName,
+        tableId,
         'biqquery::test-urn'
       );
     });

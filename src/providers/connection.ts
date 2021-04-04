@@ -86,26 +86,26 @@ export default class ConnectionProvider {
   }
 
   public async getPGTablesDetails(
-    tableName: string
+    tableId: string
   ): Promise<IPGTablesDetails[]> {
     return <Promise<IPGTablesDetails[]>>(
-      this.driver.query(PG_DESCRIBE_TABLE_QUERY, [tableName])
+      this.driver.query(PG_DESCRIBE_TABLE_QUERY, [tableId])
     );
   }
 
   public async getTablesDetails(
-    tableName: string
+    tableId: string
   ): Promise<IPGTablesDetails[] | unknown> {
     const [schema, table] =
-      tableName.match(/(["`].*?["`]|[^`".]+)+(?=\s*|\s*$)/g) || [];
+      tableId.match(/(["`].*?["`]|[^`".]+)+(?=\s*|\s*$)/g) || [];
 
     switch (this.dbType) {
       case 'postgres':
-        return this.getPGTablesDetails(table || tableName);
+        return this.getPGTablesDetails(table || tableId);
       default: {
         if (!schema || !table) {
           throw new Error(
-            `Incorrect format for '${tableName}'. Should be in '<schema>.<table>' format`
+            `Incorrect format for '${tableId}'. Should be in '<schema>.<table>' format`
           );
         }
         const schemas = await this.driver.tablesSchema();
@@ -115,16 +115,38 @@ export default class ConnectionProvider {
   }
 
   public async getTableCube(
-    tableName: string,
+    tableId: string,
     dataSource: string
   ): Promise<string> {
     const schemas = await this.driver.tablesSchema();
     const template = new ScaffoldingTemplate(schemas, this.driver);
     const scaffoldingSchema = new ScaffoldingSchema(schemas);
-    scaffoldingSchema.prepareTableNamesToTables([tableName]);
-    const tableSchema = scaffoldingSchema.tableSchema(tableName, true);
+    scaffoldingSchema.prepareTableNamesToTables([tableId]);
+    const tableSchema = scaffoldingSchema.tableSchema(tableId, true);
     return template.renderFile(
       template.schemaDescriptorForTable(tableSchema, { dataSource })
+    );
+  }
+
+  public async getConnectionTablesCubes(
+    dataSource: string
+  ): Promise<Array<ITableListItem & { cube: string }>> {
+    const schemas = await this.driver.tablesSchema();
+    const template = new ScaffoldingTemplate(schemas, this.driver);
+    const scaffoldingSchema = new ScaffoldingSchema(schemas);
+    const tables = await this.getTablesList();
+    const tableIds = tables.map((table) => table.id);
+    scaffoldingSchema.prepareTableNamesToTables(tableIds);
+    return Promise.all(
+      tables.map(async (table) => {
+        const tableSchema = scaffoldingSchema.tableSchema(table.id, true);
+        return {
+          ...table,
+          cube: template.renderFile(
+            template.schemaDescriptorForTable(tableSchema, { dataSource })
+          )
+        };
+      })
     );
   }
 }

@@ -51,7 +51,7 @@ describe('Cube::Resource', () => {
         name: 'test',
         content: 'cube content',
         connection: 'connection-urn',
-        tableName: 'table1'
+        tableId: 'table1'
       };
       const urn = 'test-urn';
       const cube = new Cube({ urn });
@@ -105,7 +105,7 @@ describe('Cube::Resource', () => {
         name: 'test',
         content: 'cube content',
         connection: 'connection-urn',
-        tableName: 'table1'
+        tableId: 'table1'
       };
       const spy = jest.spyOn(Cube, 'updateByUrn').mockResolvedValueOnce(null);
 
@@ -121,7 +121,7 @@ describe('Cube::Resource', () => {
         name: 'test',
         content: 'cube content',
         connection: 'connection-urn',
-        tableName: 'table1'
+        tableId: 'table1'
       };
       const cube = new Cube({ ...data, urn });
       const spy = jest.spyOn(Cube, 'updateByUrn').mockResolvedValueOnce(cube);

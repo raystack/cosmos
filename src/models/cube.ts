@@ -28,10 +28,10 @@ const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
       trim: true,
       required: 'connection is required'
     },
-    tableName: {
+    tableId: {
       type: String,
       trim: true,
-      required: 'tableName is required'
+      required: 'tableId is required'
     },
     content: {
       type: String,

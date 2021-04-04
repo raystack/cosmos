@@ -255,7 +255,7 @@ describe('Cube::Handler', () => {
     });
 
     test('returns 400 if payload is not valid', async () => {
-      const payload = Factory.Cube.payload.build({ tableName: 1234 });
+      const payload = Factory.Cube.payload.build({ tableId: 1234 });
       const cube = Factory.Cube.data.build({ urn, ...payload });
       request.payload = payload;
       const spy = jest.spyOn(Resource, 'update').mockResolvedValueOnce(cube);

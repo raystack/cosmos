@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 export const createPayload = Joi.object()
   .keys({
     connection: Joi.string().required(),
-    tableName: Joi.string().required(),
+    tableId: Joi.string().required(),
     content: Joi.string().required()
   })
   .options({
@@ -14,7 +14,7 @@ export const createPayload = Joi.object()
 export const updatePayload = Joi.object()
   .keys({
     connection: Joi.string(),
-    tableName: Joi.string(),
+    tableId: Joi.string(),
     content: Joi.string()
   })
   .options({
@@ -32,7 +32,7 @@ export const listQuery = Joi.object({
 const cubeResponse = Joi.object({
   urn: Joi.string(),
   connection: Joi.string(),
-  tableName: Joi.string(),
+  tableId: Joi.string(),
   content: Joi.string()
 }).unknown(true);
 
