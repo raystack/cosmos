@@ -140,6 +140,22 @@ export const listTables = {
   }
 };
 
+export const createTablesCubes = {
+  description: 'Create Cubes for all tables',
+  tags: ['api'],
+  validate: {
+    params: Schema.getParams
+  },
+  response: {},
+  handler: async (req: Hapi.Request, _h: Hapi.ResponseToolkit) => {
+    const data = await Resource.createTablesCubes(req.params.urn);
+    if (!data) {
+      throw Boom.notFound(`Connection not found for urn: ${req.params.urn}`);
+    }
+    return { data };
+  }
+};
+
 export const getTable = {
   description: 'Get table details',
   tags: ['api'],

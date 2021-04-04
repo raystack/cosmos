@@ -1,9 +1,13 @@
 import Connection from 'src/models/connection';
+import Cube from 'src/models/cube';
+import * as CubeTransformer from 'src/app/cube/transformer';
+
 import {
   ICreateConnectionPayload,
   IConnectionResponse,
   IPGTablesDetails,
-  ITableListItem
+  ITableListItem,
+  ICubeDocument
 } from 'src/types';
 import ConnectionProvider from 'src/providers/connection';
 import * as Transformer from './transformer';
@@ -65,6 +69,30 @@ export const listTables = async (
     transformedData.credentials
   );
   return provider.getTablesList();
+};
+
+export const createTablesCubes = async (
+  urn: string
+): Promise<ICubeDocument[] | null> => {
+  const connection = await Connection.findByUrn(urn);
+  if (!connection) return null;
+  const transformedData = await Transformer.get(connection);
+  const provider = new ConnectionProvider(
+    transformedData.type,
+    transformedData.credentials
+  );
+  const dataSource = `${transformedData.type}::${urn}`;
+  const cubes = await provider.getConnectionTablesCubes(dataSource);
+  const cubesPayload = await Promise.all(
+    cubes.map((c) =>
+      CubeTransformer.create({
+        content: c.cube,
+        tableId: c.id,
+        connection: urn
+      })
+    )
+  );
+  return Cube.create(cubesPayload);
 };
 
 export const getTable = async (

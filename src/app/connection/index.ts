@@ -42,6 +42,11 @@ export const plugin = {
         options: Handler.listTables
       },
       {
+        method: 'PUT',
+        path: '/{urn}/tables',
+        options: Handler.createTablesCubes
+      },
+      {
         method: 'GET',
         path: '/{urn}/tables/{table_name}',
         options: Handler.getTable

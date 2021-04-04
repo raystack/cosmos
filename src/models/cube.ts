@@ -48,6 +48,8 @@ const CubeSchema = new Schema<ICubeDocument, ICubeModel>(
   }
 );
 
+CubeSchema.index({ connection: 1, tableId: 1 }, { unique: true });
+
 CubeSchema.statics.list = function list(query: ICubeListQuery = {}) {
   return this.find(query, { _id: 0 }).lean().exec();
 };
