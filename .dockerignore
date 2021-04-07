@@ -10,7 +10,6 @@ tests
 .github
 .temp
 coverage
-package-lock.json
 cube-server
 .dockerignore
 Dockerfile
