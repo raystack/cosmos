@@ -7,6 +7,7 @@ const fetch = require('node-fetch');
 const PostgresDriver = require('@cubejs-backend/postgres-driver');
 const BigQueryDriver = require('@cubejs-backend/bigquery-driver');
 const MysqlDriver = require('@cubejs-backend/mysql-driver');
+const SQLiteDriver = require('@cubejs-backend/sqlite-driver');
 
 const ENIGMA_URL = process.env.ENIGMA_URL || 'http://localhost:8000';
 
@@ -43,8 +44,7 @@ async function driverFactory(driverContext) {
   const defaultConfig = { readOnly: true };
   const { dataSource } = driverContext;
   const [type, urn] = dataSource.split('::');
-  const { data: connection } =
-    dataSource !== 'default' ? await getConnection(urn) : {};
+  const { data: connection } = urn ? await getConnection(urn) : {}
   if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
@@ -61,7 +61,10 @@ async function driverFactory(driverContext) {
       ...defaultConfig
     });
   }
-  return null;
+  return new SQLiteDriver({
+    database: 'default.db',
+    ...defaultConfig
+  });
 }
 
 function dbType(ctx) {

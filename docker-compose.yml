@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   enigma:
@@ -8,14 +8,14 @@ services:
     volumes:
       - ./src:/app/src
     ports:
-      - "8000:8000"
+      - '8000:8000'
     depends_on:
       - mongodb
     environment:
       MONGODB_HOST: mongodb://mongodb/enigma
       CUBE_URL: http://cube:4000
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:8000/ping"]
+      test: ['CMD', 'sh', '-c', 'curl -f http://localhost:8000/ping']
       interval: 20s
       timeout: 5s
       retries: 12
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./.temp/database:/data/db
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:27017"]
+      test: ['CMD', 'sh', '-c', 'curl -f http://localhost:27017']
       interval: 10s
       timeout: 5s
       retries: 12
@@ -35,26 +35,26 @@ services:
       context: ./cube-server
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
+      - '4000:4000'
     depends_on:
       - redis
       - aggregate_db
     environment:
       ENIGMA_URL: http://enigma:8000
-      REDIS_URL: redis://redis:6379
-      CUBEJS_DEV_MODE: "true"
+      CUBEJS_REDIS_URL: redis://redis:6379
+      CUBEJS_DEV_MODE: 'true'
       CUBEJS_EXT_DB_HOST: aggregate_db
       CUBEJS_EXT_DB_NAME: cube-aggregate
       CUBEJS_EXT_DB_USER: postgres
       CUBEJS_EXT_DB_PASS: postgres
       CUBEJS_EXT_DB_TYPE: postgres
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:4000/livez"]
+      test: ['CMD', 'sh', '-c', 'curl -f http://localhost:4000/livez']
       interval: 10s
       timeout: 5s
       retries: 12
   redis:
-    image: "redis:alpine"
+    image: 'redis:alpine'
   aggregate_db:
     image: postgres:12
     environment:

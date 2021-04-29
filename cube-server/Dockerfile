@@ -1,4 +1,4 @@
-FROM cubejs/cube:v0.26.44-alpine
+FROM cubejs/cube:v0.27.3-alpine
 COPY package* ./
-RUN npm install --production
+RUN npm ci --only=production
 COPY . .
