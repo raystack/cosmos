@@ -37,6 +37,10 @@ const MetricSchema = new Schema<IMetricDocument, IMetricModel>(
       type: Map,
       of: String
     },
+    labels: {
+      type: Map,
+      of: String
+    },
     fields: {
       measures: [String],
       dimensions: [String],
