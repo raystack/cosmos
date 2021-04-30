@@ -32,10 +32,13 @@ describe('Connection::Metric', () => {
           ...data,
           urn
         });
-      const connectionSpy = jest
-        .spyOn(Metric, 'create')
+      const connectionSpy = jest.spyOn(Metric, 'create').mockResolvedValue({
         // @ts-ignore
-        .mockResolvedValue({ ...metric, urn });
+        toJSON: () => ({
+          ...metric,
+          urn
+        })
+      });
       const result = await Resource.create(data);
       expect(result.urn).toBe(urn);
 
