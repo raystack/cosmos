@@ -104,7 +104,6 @@ const manifest: Manifest = {
       },
       {
         plugin: CubeProxy.plugin,
-        options: Config.get('/cube_server'),
         routes: {
           prefix: '/cube'
         }

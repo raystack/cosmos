@@ -21,8 +21,7 @@ const config = {
   },
   cube_server: {
     url: {
-      $env: 'CUBE_URL',
-      $default: 'http://localhost:4000'
+      $env: 'CUBE_URL'
     }
   },
   encryption_secrect_key: {
