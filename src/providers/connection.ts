@@ -14,6 +14,23 @@ const PG_DESCRIBE_TABLE_QUERY = `SELECT table_catalog, table_name, column_name, 
 
 type Config = Record<string, string | number | boolean>;
 
+function capitalize(str: string) {
+  return str[0].toUpperCase() + str.slice(1);
+}
+
+function santitizedCubeName(name: string) {
+  const patt = /^[a-z0-9_]+$/;
+  const camelCaseName = name.split('-').map(capitalize).join('');
+  return patt.test(camelCaseName) ? camelCaseName : `Cube${camelCaseName}`;
+}
+
+function sanitizeTableSchema(tableSchame: { cube: string; joins: any[] }) {
+  const joins = tableSchame.joins.map((j) => {
+    return { ...j, cubeToJoin: santitizedCubeName(j.cubeToJoin) };
+  });
+  return { ...tableSchame, cube: santitizedCubeName(tableSchame.cube), joins };
+}
+
 export default class ConnectionProvider {
   config: Config;
 
@@ -124,7 +141,9 @@ export default class ConnectionProvider {
     scaffoldingSchema.prepareTableNamesToTables([tableId]);
     const tableSchema = scaffoldingSchema.tableSchema(tableId, true);
     return template.renderFile(
-      template.schemaDescriptorForTable(tableSchema, { dataSource })
+      template.schemaDescriptorForTable(sanitizeTableSchema(tableSchema), {
+        dataSource
+      })
     );
   }
 
@@ -143,7 +162,10 @@ export default class ConnectionProvider {
         return {
           ...table,
           cube: template.renderFile(
-            template.schemaDescriptorForTable(tableSchema, { dataSource })
+            template.schemaDescriptorForTable(
+              sanitizeTableSchema(tableSchema),
+              { dataSource }
+            )
           )
         };
       })
