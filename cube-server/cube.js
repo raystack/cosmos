@@ -43,8 +43,9 @@ async function getCubesMetaData() {
 async function driverFactory(driverContext) {
   const defaultConfig = { readOnly: true };
   const { dataSource } = driverContext;
-  const [type, urn] = dataSource.split('::');
+  const [type, urn] = dataSource ? dataSource.split('::') : ['sqlite'];
   const { data: connection } = urn ? await getConnection(urn) : {}
+
   if (connection && connection.type === 'postgres') {
     return new PostgresDriver({ ...connection.credentials, ...defaultConfig });
   }
@@ -69,8 +70,7 @@ async function driverFactory(driverContext) {
 
 function dbType(ctx) {
   const { dataSource } = ctx;
-  if (dataSource === 'default') return 'bigquery';
-  const [type] = dataSource.split('::');
+  const [type] = dataSource && dataSource !== 'default' ? dataSource.split('::') : ['sqlite'];
   return type;
 }
 
