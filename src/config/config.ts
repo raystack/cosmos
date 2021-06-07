@@ -27,6 +27,15 @@ const config = {
   encryption_secrect_key: {
     $env: 'ENCRYPTION_SECRET_KEY',
     $default: 'test'
+  },
+  new_relic: {
+    APP_NAME: { $env: 'NEW_RELIC_APP_NAME' },
+    KEY: { $env: 'NEW_RELIC_KEY' },
+    enabled: {
+      $filter: 'env',
+      test: 'false',
+      $default: { $env: 'NEW_RELIC_ENABLED', $default: 'false' }
+    }
   }
 };
 

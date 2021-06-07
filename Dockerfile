@@ -7,6 +7,7 @@ RUN npm run build
 
 FROM node:12.13-alpine AS server
 ENV NODE_ENV production
+ENV NEW_RELIC_HOME ./build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production

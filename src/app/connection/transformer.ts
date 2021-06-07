@@ -18,9 +18,7 @@ export async function get(data: IConnection): Promise<IConnectionResponse> {
   return Adapter.decrptCredentials(data);
 }
 
-export async function update(
-  data: ICreateConnectionPayload
-): Promise<
+export async function update(data: ICreateConnectionPayload): Promise<
   Omit<ICreateConnectionPayload, 'credentials'> & {
     credentials: string;
   }

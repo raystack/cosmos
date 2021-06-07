@@ -60,6 +60,9 @@ const manifest: Manifest = {
   register: {
     plugins: [
       {
+        plugin: '../plugins/events'
+      },
+      {
         plugin: '../plugins/mongoose',
         options: Config.get('/mongoose')
       },

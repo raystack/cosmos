@@ -93,9 +93,9 @@ export default class ConnectionProvider {
       default: {
         const schemas = await this.driver.tablesSchema();
         return Object.keys(schemas).reduce((acc, schema) => {
-          const tables: ITableListItem[] = Object.keys(
-            schemas[schema]
-          ).map((table) => ({ name: table, id: `${schema}.${table}` }));
+          const tables: ITableListItem[] = Object.keys(schemas[schema]).map(
+            (table) => ({ name: table, id: `${schema}.${table}` })
+          );
           return [...acc, ...tables];
         }, <ITableListItem[]>[]);
       }

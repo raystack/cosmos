@@ -1,3 +1,4 @@
+require('newrelic');
 import Composer from './config/composer';
 
 const main = async () => {
