@@ -8,12 +8,12 @@
   "template": "docker",
   "templateVersion": "0.26.44",
   "devDependencies": {
-    "@cubejs-backend/bigquery-driver": "^0.27.2",
-    "@cubejs-backend/cubestore-driver": "^0.27.2",
-    "@cubejs-backend/mysql-driver": "^0.27.2",
-    "@cubejs-backend/postgres-driver": "^0.27.2",
-    "@cubejs-backend/server": "^0.27.3",
-    "@cubejs-backend/sqlite-driver": "^0.27.2"
+    "@cubejs-backend/bigquery-driver": "^0.27.30",
+    "@cubejs-backend/cubestore-driver": "^0.27.30",
+    "@cubejs-backend/mysql-driver": "^0.27.30",
+    "@cubejs-backend/postgres-driver": "^0.27.30",
+    "@cubejs-backend/server": "^0.27.30",
+    "@cubejs-backend/sqlite-driver": "^0.27.30"
   },
   "dependencies": {
     "node-fetch": "^2.6.1"
