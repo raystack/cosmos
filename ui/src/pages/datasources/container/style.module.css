@@ -1,0 +1,33 @@
+.contentLayout {
+  padding: 40px 40px 0;
+}
+
+.rightSidebarWrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+}
+
+.btnCreate {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.createForm {
+  padding: 24px 40px 0;
+  max-width: 500px;
+}
+
+.footerBtns {
+  border-top: 1px solid #f7ecec;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px 48px;
+}
+
+.footerBtn {
+  margin-right: 24px;
+  min-width: 100px;
+}

@@ -1,0 +1,166 @@
+.leftPanel {
+  padding: 24px;
+  border-right: 1px solid rgb(234, 234, 234);
+  width: 360px;
+  height: calc(100vh - 64px);
+
+}
+
+.select {
+  width: 100%;
+}
+
+.leftPanelTabs {
+  margin-top: 36px;
+}
+
+
+.dimensions {
+  border-bottom: 1px solid rgb(225, 225, 225);
+  padding: 8px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dimensionsList {
+  margin-top: 16px;
+  max-height: calc(100vh - 300px);
+  overflow: scroll;
+}
+
+.explorelayout {
+  display: flex;
+  
+}
+
+.filtersPannel {
+  width: 100%;
+  border-bottom: 1px solid rgb(234, 234, 234);
+  padding: 12px 16px;
+}
+
+
+.rightPanel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  overflow: scroll;
+  height: calc(100vh - 64px);
+
+}
+
+.filtersTop {
+  display: flex;
+  align-items: center;
+}
+
+.addFilterBtn {
+  margin-left: 8px;
+}
+
+.addFilterBtn span:nth-child(2){
+  margin-left: 4px !important;
+}
+
+.addFilterWrapper {
+  position: relative;
+}
+
+.filtersListWarpper {
+  width: 240px;
+  max-height:  360px;
+  background: white;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 2;
+}
+
+.filtersListSearch {
+  padding: 12px 8px;
+}
+
+.filtersList {
+  padding: 0px 4px 8px;
+}
+
+.filtersListItem {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.filtersListItem:hover {
+  background-color: rgb(232, 239, 253);
+}
+
+.filtersRowWrapper {
+  margin-top: 16px;
+}
+
+.filterRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filtersRowInput{
+  border-radius: 2px;
+  border: 1px solid rgb(202, 202, 202);
+  min-width: 160px;
+  max-width: 200px;
+  margin-right: 16px;
+}
+
+.chartSelector {
+  display: flex;
+  padding: 28px 32px 20px;
+}
+
+.chartSelectorBtn {
+  padding: 0;
+  height: 100%;
+  border: 0;
+  margin-right: 16px;
+
+}
+
+.chartSelectorBtnActive {
+  border: 1px solid rgb(202, 202, 202);
+}
+
+.chartTimeWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeSelectorWrapper {
+  margin: 0 32px;
+}
+
+.chartRenderer {
+  padding: 0 32px;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+
+.numberRenderer {
+  display: flex;
+  align-items: center;
+}
+
+.numberWrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 16px;
+}
+
+.chartWrapper {
+  margin-top: 48px;
+}
